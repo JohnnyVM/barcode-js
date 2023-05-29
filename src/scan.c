@@ -4,6 +4,12 @@
 #include <zbar.h>
 #include "emscripten.h"
 
+#ifdef __cplusplus
+#define EXTERN extern "C"
+#else
+#define EXTERN
+#endif
+
 // External javascript function to pass the retrieved data to.
 extern void js_output_result(const char *symbolName, const char *data, const int *polygon, const unsigned polysize);
 

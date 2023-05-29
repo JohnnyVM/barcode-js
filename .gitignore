@@ -1,2 +1,2 @@
-app/js/a.out.js
-app/js/a.out.wasm
+app/module/barcode-reader/zbar.wasm
+app/module/barcode-reader/zbar.mjs

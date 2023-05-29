@@ -1,4 +1,4 @@
-import Module from './module/barcode-reader/zbar.mjs'
+import Module from './zbar.mjs'
 
 class BarcodeReader extends HTMLElement {
 
