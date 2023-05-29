@@ -4,6 +4,16 @@ FROM emscripten/emsdk:latest
 # Install required tools that are useful for your project i.e. ninja-build
 RUN apt update && apt install -y autoconf libtool gettext autogen imagemagick libmagickcore-dev
 
+# Set user and group
+ENV EM_CACHE=/tmp
+ARG uid=9999
+RUN id ${uid} || adduser -u ${uid} -ms /bin/sh emcc
+RUN chown ${uid} /src
+RUN mkdir /output && chown ${uid} /output
+
+# Switch to user
+USER ${uid}:${gid}
+
 RUN cd /src \
     && git clone https://github.com/ZBar/ZBar \
     && cd ZBar \
