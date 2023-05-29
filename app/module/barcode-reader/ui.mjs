@@ -1,6 +1,8 @@
+import { Settings } from '../utils.mjs';
 import Module from './zbar.mjs'
 
 class BarcodeReader extends HTMLElement {
+	settings = null;
 
     set srcObject(stream) {
         this.video.srcObject = stream;
@@ -23,25 +25,13 @@ class BarcodeReader extends HTMLElement {
     }
 
     show() {
-        this.ctx.drawImage(this.video, 0, 0);
-
-	    // get the image data from the canvas
-	    const image = this.ctx.getImageData(0, 0, this.mainCanvas.width, this.mainCanvas.height)
-
-    	// convert the image data to grayscale, TODO, move to C
-        const grayData = []
-        const d = image.data;
-        for (var i = 0, j = 0; i < d.length; i += 4, j++) {
-            grayData[j] = (d[i] * 66 + d[i + 1] * 129 + d[i + 2] * 25 + 4096) >> 8;
-        }
-
-        const mod = Module();
-
-        requestAnimationFrame(() => this.show());
+		const mymod = Module();
     }
 
     constructor() {
         super();
+		this.settings = new Settings();
+
         // Create a shadow root
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.mainCanvas = document.createElement("canvas");
@@ -63,8 +53,6 @@ class BarcodeReader extends HTMLElement {
                 this.attributeChangedCallback(element, null, attribute);
             }
         });
-
-        this.show();
     }
 }
 

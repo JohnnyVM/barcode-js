@@ -17,7 +17,5 @@ navigator.mediaDevices.getUserMedia(MediaRequirements).then(function(stream) {
     barcode.setAttribute('width', actualSettings.width);
     barcode.setAttribute('height', actualSettings.height);
     barcode.srcObject = stream;
-}).catch(function(err) {
-    /* manejar el error */
-    console.error(`${err.name}: ${err.message}`);
+	return barcode.show();
 });
