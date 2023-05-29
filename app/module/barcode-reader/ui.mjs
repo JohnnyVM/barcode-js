@@ -24,7 +24,7 @@ class BarcodeReader extends HTMLElement {
         this.ctx.drawImage(this.video, 0, 0);
 
 	    // get the image data from the canvas
-	    const image = this.ctx.getImageData(0, 0, canvas.width, canvas.height)
+	    const image = this.ctx.getImageData(0, 0, this.mainCanvas.width, this.mainCanvas.height)
 
     	// convert the image data to grayscale 
         const grayData = []
