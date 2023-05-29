@@ -5,7 +5,7 @@
 if [[ $1 = "run" ]]; then
 docker run -ti \
 	-v $(pwd)/src:/code \
-	-v $(pwd)/app/js:/output \
+	-v $(pwd)/app/module/barcode-reader/:/output \
 	--workdir /output \
 	--entrypoint /bin/bash \
 	barcodejs:latest
@@ -21,5 +21,6 @@ docker run -ti \
 	--js-library /code/scan.js \
 	-s EXPORTED_RUNTIME_METHODS='["cwrap", "UTF8ToString"]' \
 	-I /src/ZBar/include /code/scan.c /src/ZBar/zbar/.libs/libzbar.a \
-	--cache /tmp
+	--cache /tmp \
+	-o zbar.mjs
 fi
