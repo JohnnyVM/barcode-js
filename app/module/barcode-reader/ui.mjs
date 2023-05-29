@@ -1,3 +1,5 @@
+import Module from './module/barcode-reader/zbar.mjs'
+
 class BarcodeReader extends HTMLElement {
 
     set srcObject(stream) {
@@ -26,14 +28,14 @@ class BarcodeReader extends HTMLElement {
 	    // get the image data from the canvas
 	    const image = this.ctx.getImageData(0, 0, this.mainCanvas.width, this.mainCanvas.height)
 
-    	// convert the image data to grayscale 
+    	// convert the image data to grayscale, TODO, move to C
         const grayData = []
         const d = image.data;
         for (var i = 0, j = 0; i < d.length; i += 4, j++) {
             grayData[j] = (d[i] * 66 + d[i + 1] * 129 + d[i + 2] * 25 + 4096) >> 8;
         }
 
-        this.ctx.putImageData(grayData, 0, 0);
+        const mod = Module();
 
         requestAnimationFrame(() => this.show());
     }
