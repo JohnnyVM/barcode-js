@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-# Docker command docker build --no-cache --tag barcodejs:latest --build-arg=user=$(id -n) .
+# Docker command docker build --no-cache --tag barcodejs:latest --build-arg=uid=$(id -u) .
 
 if [[ $1 = "run" ]]; then
 docker run -ti \
@@ -12,7 +12,7 @@ docker run -ti \
 else
 docker run -ti \
 	-v $(pwd)/src:/code \
-	-v $(pwd)/app/js:/output \
+	-v $(pwd)/app/module/barcode-reader/:/output \
 	--user $(id -u):$(id -g) \
 	--workdir /output \
 	--entrypoint emcc \
