@@ -1,5 +1,15 @@
 import Module from './zbar.mjs'
 
+class BarcodeDetector {
+	contructor() {
+		this.instance = Module();
+	}
+
+	// returns a Promise which fulfills with an Array of detected barcodes within an image.
+	detect(image) {
+		// TODO
+	}
+}
 
 class ZBar {
 	static #instance = null;

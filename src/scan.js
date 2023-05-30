@@ -13,7 +13,6 @@ mergeInto(LibraryManager.library, {
         const coordinates = new Int32Array(resultView);
 
         // call the downstream processing function that should have been set by the client code
-		console.log('3');
         const downstreamProcessor = Module["processResult"];
         if (downstreamProcessor == null) {
             throw new Error("No downstream processing function set");

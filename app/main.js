@@ -1,4 +1,4 @@
-import { BarcodeReader } from './module/barcode-reader/ui.mjs';
+import { BarcodeReader } from './module/barcode-detector/ui.mjs';
 
 customElements.define("barcode-reader", BarcodeReader);
 

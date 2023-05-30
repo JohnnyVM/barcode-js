@@ -1,2 +1,2 @@
-app/module/barcode-reader/zbar.wasm
-app/module/barcode-reader/zbar.mjs
+app/module/barcode-detector/zbar.wasm
+app/module/barcode-detector/zbar.mjs

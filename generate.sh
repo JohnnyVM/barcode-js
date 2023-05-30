@@ -5,14 +5,14 @@
 if [[ $1 = "run" ]]; then
 docker run -ti \
 	-v $(pwd)/src:/code \
-	-v $(pwd)/app/module/barcode-reader/:/output \
+	-v $(pwd)/app/module/barcode-detector/:/output \
 	--workdir /output \
 	--entrypoint /bin/bash \
 	barcodejs:latest
 else
 docker run -ti \
 	-v $(pwd)/src:/code \
-	-v $(pwd)/app/module/barcode-reader/:/output \
+	-v $(pwd)/app/module/barcode-detector/:/output \
 	--user $(id -u):$(id -g) \
 	--workdir /output \
 	--entrypoint emcc \

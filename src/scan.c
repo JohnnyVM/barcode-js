@@ -43,7 +43,6 @@ int scan_image(uint8_t *raw, int width, int height)
 	// Iterate over each detected barcode and extract its data and location
     for (const zbar_symbol_t *symbol = zbar_image_first_symbol(image); symbol; symbol = zbar_symbol_next(symbol))
     {
-    	printf("1 \n");
         // Get the data encoded in the detected barcode.
         zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
         const char *data = zbar_symbol_get_data(symbol);

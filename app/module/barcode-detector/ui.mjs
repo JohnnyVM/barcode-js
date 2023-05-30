@@ -89,7 +89,7 @@ class BarcodeReader extends HTMLElement {
         // Apply external styles to the shadow DOM
         const linkElem = document.createElement("link");
         linkElem.setAttribute("rel", "stylesheet");
-        linkElem.setAttribute("href", "module/barcode-reader/style.css");
+        linkElem.setAttribute("href", "module/barcode-detector/style.css");
 
         this.shadowRoot.append(linkElem, this.mainCanvas, this.video);
 
