@@ -80,6 +80,8 @@ class BarcodeReader extends HTMLElement {
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.mainCanvas = document.createElement("canvas");
         this.ctx = this.mainCanvas.getContext("2d", {willReadFrequently: true});
+		this.ctx.canvas.width  = window.innerWidth;
+		this.ctx.canvas.height = window.innerHeight;
 
         this.video = document.createElement("video");
         this.video.style = "display:none;";
