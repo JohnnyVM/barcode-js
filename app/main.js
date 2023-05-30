@@ -18,13 +18,9 @@ async function asyncInterval(fn) {
 }
 
 navigator.mediaDevices.getUserMedia(MediaRequirements).then(function(stream) {
-	// tell the canvas which resolution we ended up getting from the webcam
-	const track = stream.getVideoTracks()[0];
-	const actualSettings = track.getSettings();
-	console.log(actualSettings.width, actualSettings.height);
     let barcode = document.getElementsByTagName('barcode-reader')[0];
-    barcode.setAttribute('width', actualSettings.width);
-    barcode.setAttribute('height', actualSettings.height);
+
+	// tell the canvas which resolution we ended up getting from the webcam
     barcode.srcObject = stream;
 	setInterval(async () => {
 			await barcode.display();
