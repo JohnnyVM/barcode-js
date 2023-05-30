@@ -1,5 +1,27 @@
 import { Settings } from '../utils.mjs';
+import { scanImage, ZBar } from './lib.js'
 import Module from './zbar.mjs'
+
+let modZBar = null
+
+function drawPoly(ctx, poly) {
+// drawPoly expects a flat array of coordinates forming a polygon (e.g. [x1,y1,x2,y2,... etc])
+	ctx.beginPath();
+	ctx.moveTo(poly[0], poly[1]);
+	for (let item = 2; item < poly.length - 1; item += 2) { ctx.lineTo(poly[item], poly[item + 1]) }
+
+	ctx.lineWidth = 2;
+	ctx.strokeStyle = "#FF0000";
+	ctx.closePath();
+	ctx.stroke();
+}
+
+// render the string contained in the barcode as text on the canvas
+function renderData(ctx, data, x, y) {
+	ctx.font = "15px Arial";
+	ctx.fillStyle = "red";
+	ctx.fillText(data, x, y);
+}
 
 class BarcodeReader extends HTMLElement {
 	settings = null;
@@ -24,8 +46,30 @@ class BarcodeReader extends HTMLElement {
         }
     }
 
-    show() {
-		const mymod = Module();
+	async display() {
+		if(modZBar === null) {
+			modZBar = await ZBar.getInstance();
+
+			// set the function that should be called whenever a barcode is detected
+			modZBar['processResult'] = (symbol, data, polygon) => {
+				console.log("Data liberated from WASM heap:")
+				console.log(symbol)
+				console.log(data)
+				console.log(polygon)
+
+				// draw the bounding polygon
+				drawPoly(this.ctx, polygon)
+
+				// render the data at the first coordinate of the polygon
+				renderData(this.ctx, data, polygon[0], polygon[1] - 10)
+			}
+		}
+        this.ctx.drawImage(this.video, 0, 0);
+
+	    // get the image data from the canvas
+	    const image = this.ctx.getImageData(0, 0, this.mainCanvas.width, this.mainCanvas.height)
+
+		let barcodes = await scanImage(image);
     }
 
     constructor() {
@@ -35,7 +79,7 @@ class BarcodeReader extends HTMLElement {
         // Create a shadow root
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.mainCanvas = document.createElement("canvas");
-        this.ctx = this.mainCanvas.getContext("2d");
+        this.ctx = this.mainCanvas.getContext("2d", {willReadFrequently: true});
 
         this.video = document.createElement("video");
         this.video.style = "display:none;";
