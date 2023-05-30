@@ -1,6 +1,9 @@
 import { BarcodeReader } from './module/barcode-detector/ui.mjs';
+import { ProductList, ProductCard } from './module/product/ui.mjs';
 
 customElements.define("barcode-reader", BarcodeReader);
+customElements.define("product-list", ProductList);
+customElements.define("product-card", ProductCard);
 
 let MediaRequirements = {
     video: {
@@ -20,7 +23,6 @@ async function asyncInterval(fn) {
 navigator.mediaDevices.getUserMedia(MediaRequirements).then(function(stream) {
     let barcode = document.getElementsByTagName('barcode-reader')[0];
 
-	// tell the canvas which resolution we ended up getting from the webcam
     barcode.srcObject = stream;
 	setInterval(async () => {
 			await barcode.display();

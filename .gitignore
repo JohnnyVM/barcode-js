@@ -1,2 +1,3 @@
 app/module/barcode-detector/zbar.wasm
 app/module/barcode-detector/zbar.mjs
+app/config.js

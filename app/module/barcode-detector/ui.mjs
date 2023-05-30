@@ -51,11 +51,9 @@ class BarcodeReader extends HTMLElement {
 			modZBar = await ZBar.getInstance();
 
 			// set the function that should be called whenever a barcode is detected
-			modZBar['processResult'] = (symbol, data, polygon) => {
-				console.log("Data liberated from WASM heap:")
-				console.log(symbol)
-				console.log(data)
-				console.log(polygon)
+			modZBar['processResult'] = async (symbol, data, polygon) => {
+				let pl = document.querySelector('product-list');
+				pl.addProduct(data);
 
 				// draw the bounding polygon
 				drawPoly(this.ctx, polygon)
