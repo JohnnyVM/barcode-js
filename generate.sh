@@ -17,10 +17,10 @@ docker run -ti \
 	--workdir /output \
 	--entrypoint emcc \
 	barcodejs:latest \
-	-g -s WASM=1 -v \
+	-O3 -fno-exceptions -sFILESYSTEM=0 -flto -s WASM=1 -v \
 	--js-library /code/scan.js \
 	-s EXPORTED_RUNTIME_METHODS='["cwrap", "UTF8ToString"]' \
-	-sASSERTIONS -sMODULARIZE -s 'EXPORT_NAME="createMyModule"' -s EXPORT_ES6=1 \
+	-sASSERTIONS -sMODULARIZE -s 'EXPORT_NAME="ZBar"' -s EXPORT_ES6=1 \
 	-I /src/ZBar/include /code/scan.c /src/ZBar/zbar/.libs/libzbar.a \
 	--cache /tmp \
 	-o zbar.mjs
