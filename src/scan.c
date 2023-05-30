@@ -22,11 +22,11 @@ int scan_image(uint8_t *raw, int width, int height)
     scanner = zbar_image_scanner_create();
 
     // set the scanner density (function will have nonzero return code on error, check your browser console)
-    int x_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_X_DENSITY, 1)
+    int x_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_X_DENSITY, 1);
     if(x_density) {
         printf("ALERT: ZBAR_CFG_X_DENSITY %d \n", x_density);
     }
-    int y_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_Y_DENSITY, 1)
+    int y_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_Y_DENSITY, 1);
     if(y_density) {
         printf("ALERT: ZBAR_CFG_Y_DENSITY %d \n", y_density);
     }
