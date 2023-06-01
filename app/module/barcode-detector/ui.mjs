@@ -28,6 +28,13 @@ class BarcodeReader extends HTMLElement {
 
     set srcObject(stream) {
         this.video.srcObject = stream;
+
+		const track = stream.getVideoTracks()[0];
+		const actualSettings = track.getSettings();
+		console.log(actualSettings.width, actualSettings.height)
+		this.mainCanvas.width = actualSettings.width;
+		this.mainCanvas.height = actualSettings.height;
+
         this.video.play();
     }
 
@@ -49,10 +56,10 @@ class BarcodeReader extends HTMLElement {
 	async display() {
 		if(modZBar === null) {
 			modZBar = await ZBar.getInstance();
+			let pl = document.querySelector('product-list');
 
 			// set the function that should be called whenever a barcode is detected
 			modZBar['processResult'] = async (symbol, data, polygon) => {
-				let pl = document.querySelector('product-list');
 				pl.addProduct(data);
 
 				// draw the bounding polygon
@@ -76,20 +83,21 @@ class BarcodeReader extends HTMLElement {
 
         // Create a shadow root
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
-        this.mainCanvas = document.createElement("canvas");
-        this.ctx = this.mainCanvas.getContext("2d", {willReadFrequently: true});
-		this.ctx.canvas.width  = window.innerWidth;
-		this.ctx.canvas.height = window.innerHeight;
+        let wrapper = document.createElement("div");
+		wrapper.classList.add('barcode');
+        	this.mainCanvas = document.createElement("canvas");
+        	this.ctx = this.mainCanvas.getContext("2d", {willReadFrequently: true});
 
-        this.video = document.createElement("video");
-        this.video.style = "display:none;";
+        	this.video = document.createElement("video");
+        	this.video.style = "display:none;";
+		wrapper.append(this.video, this.mainCanvas)
 
         // Apply external styles to the shadow DOM
         const linkElem = document.createElement("link");
         linkElem.setAttribute("rel", "stylesheet");
         linkElem.setAttribute("href", "module/barcode-detector/style.css");
 
-        this.shadowRoot.append(linkElem, this.mainCanvas, this.video);
+        this.shadowRoot.append(linkElem, wrapper);
 
         this.constructor.observedAttributes.forEach(element => {
             let attribute = this.getAttribute(element);

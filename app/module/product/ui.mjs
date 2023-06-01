@@ -103,7 +103,7 @@ class ProductList extends HTMLElement {
 	findBarcode(bar) {
 		for(const node of this.container.childNodes) {
 			if(node instanceof ProductCard) {
-				let bar = node.getAttribute('barcode');
+				let barcode = node.getAttribute('barcode');
 				if(bar === barcode) {
 					return node;
 				}

@@ -11,6 +11,8 @@ class BarcodeDetector {
 	}
 }
 
+
+
 class ZBar {
 	static #instance = null;
 	static #semaphore = false; // meh
@@ -54,6 +56,10 @@ async function scanImage(image) {
     //(this is not really necessary in this example as we could reuse the buffer, but is used to demonstrate how you can manage Wasm heap memory from the js environment)
 	api.destroy_buffer(p);
 
+}
+
+function computeEndVideoScale() {
+	
 }
 
 export { scanImage, ZBar };
