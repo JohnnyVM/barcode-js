@@ -1,4 +1,4 @@
-import { Settings } from '../utils.mjs';
+import { Settings } from '../utils.js';
 import { scanImage, ZBar } from './lib.js'
 import Module from './zbar.js'
 

@@ -1,5 +1,5 @@
-import { BarcodeReader } from './module/barcode-detector/ui.mjs';
-import { ProductList, ProductCard } from './module/product/ui.mjs';
+import { BarcodeReader } from './module/barcode-detector/ui.js';
+import { ProductList, ProductCard } from './module/product/ui.js';
 
 customElements.define("barcode-reader", BarcodeReader);
 customElements.define("product-list", ProductList);
