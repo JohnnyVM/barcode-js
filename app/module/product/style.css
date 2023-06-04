@@ -1,0 +1,12 @@
+.contenedorCard{
+    position: absolute;
+    top: 25vh;
+    height: 75vh;
+    left: 1%;
+}
+.card-body{
+    line-height: 1vh;
+}
+.card-name{
+    font-weight: bold;
+}

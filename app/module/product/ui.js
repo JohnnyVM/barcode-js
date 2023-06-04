@@ -1,4 +1,4 @@
-import { fetchProduct } from './lib.comijs';
+import { fetchProduct } from './lib.js';
 
 class ProductCard extends HTMLElement {
 	static get observedAttributes() {
@@ -84,6 +84,7 @@ class ProductList extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.container = document.createElement('div');
+		this.container.classList.add('contenedorCard');
 
         // Apply external styles to the shadow DOM
         const linkElem = document.createElement("link");
