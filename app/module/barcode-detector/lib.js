@@ -1,4 +1,4 @@
-import Module from './zbar.mjs'
+import Module from './zbar.js'
 
 class BarcodeDetector {
 	contructor() {

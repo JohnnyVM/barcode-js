@@ -23,5 +23,5 @@ docker run -ti \
 	-sASSERTIONS -sMODULARIZE -s 'EXPORT_NAME="ZBar"' -s EXPORT_ES6=1 \
 	-I /src/ZBar/include /code/scan.c /src/ZBar/zbar/.libs/libzbar.a \
 	--cache /tmp \
-	-o zbar.mjs
+	-o zbar.js
 fi

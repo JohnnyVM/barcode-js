@@ -1,6 +1,6 @@
 import { Settings } from '../utils.mjs';
 import { scanImage, ZBar } from './lib.js'
-import Module from './zbar.mjs'
+import Module from './zbar.js'
 
 let modZBar = null
 
