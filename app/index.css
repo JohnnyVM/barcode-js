@@ -4,6 +4,18 @@ html, body {
   margin: 0;
 }
 
+header {
+  position: inherit;
+}
+header img {
+  display: block;
+  width: auto;
+  height: 3rem;
+}
+.header_logo {
+  display: table-cell;
+}
+
 main {
 	display: flex;
 }

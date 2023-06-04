@@ -1,4 +1,4 @@
-import { fetchProduct } from './lib.mjs';
+import { fetchProduct } from './lib.js';
 
 class ProductCard extends HTMLElement {
 	static get observedAttributes() {
