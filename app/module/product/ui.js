@@ -1,4 +1,4 @@
-import { fetchProduct } from './lib.js';
+import { fetchProduct } from './lib.comijs';
 
 class ProductCard extends HTMLElement {
 	static get observedAttributes() {
