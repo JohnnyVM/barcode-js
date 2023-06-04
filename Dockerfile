@@ -2,7 +2,7 @@
 FROM emscripten/emsdk:latest
 
 # Install required tools that are useful for your project i.e. ninja-build
-RUN apt update && apt install -y autoconf libtool gettext autogen imagemagick libmagickcore-dev
+RUN apt update && apt install -y autoconf libtool gettext autogen imagemagick libmagickcore-dev autopoint autoconf-archive pkg-config
 
 # Set user and group
 ENV EM_CACHE=/tmp
@@ -15,7 +15,7 @@ RUN mkdir /output && chown ${uid} /output
 USER ${uid}:${gid}
 
 RUN cd /src \
-    && git clone https://github.com/ZBar/ZBar \
+    && git clone https://github.com/mchehab/zbar.git \
     && cd ZBar \
     && sed -i "s/ -Werror//" $(pwd)/configure.ac \
     && autoreconf -i \
