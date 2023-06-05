@@ -4,8 +4,8 @@ html, body {
   margin: 0;
 }
 header {
-  position: inherit;
-  height: 10%;
+  position: fixed;
+  height: 5%;
 }
 header img {
   display: block;
