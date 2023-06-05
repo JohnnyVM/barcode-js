@@ -1,3 +1,8 @@
 canvas {
-    border: 5px solid #000000;
+    position: absolute;
+    border: 1px solid #000000;
+    border-radius: 15px;
+    width: 99%;
+    top: 5vh;
+    height: 20vh;
 }
