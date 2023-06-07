@@ -6,9 +6,12 @@ customElements.define("product-list", ProductList);
 customElements.define("product-card", ProductCard);
 
 let MediaRequirements = {
-    video: {
-        facingMode: "environment",
-    }
+  audio: false,
+  video: {
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+    facingMode: "environment",
+  }
 };
 
 async function asyncInterval(fn) {

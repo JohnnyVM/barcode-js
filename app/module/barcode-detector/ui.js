@@ -89,7 +89,6 @@ class BarcodeReader extends HTMLElement {
         	this.ctx = this.mainCanvas.getContext("2d", {willReadFrequently: true});
 
         	this.video = document.createElement("video");
-        	this.video.style = "display:none;";
 		wrapper.append(this.video, this.mainCanvas)
 
         // Apply external styles to the shadow DOM
