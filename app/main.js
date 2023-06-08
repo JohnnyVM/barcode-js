@@ -14,20 +14,9 @@ let MediaRequirements = {
   }
 };
 
-async function asyncInterval(fn) {
-  return await new Promise(resolve => {
-    const interval = setInterval(() => {
-		fn();
-        clearInterval(interval);
-    }, 333);
-  });
-}
-
-navigator.mediaDevices.getUserMedia(MediaRequirements).then(function(stream) {
+navigator.mediaDevices.getUserMedia(MediaRequirements).then(async function(stream) {
     let barcode = document.getElementsByTagName('barcode-reader')[0];
 
     barcode.srcObject = stream;
-	setInterval(async () => {
-			await barcode.display();
-	}, 300);
+	await barcode.play();
 });

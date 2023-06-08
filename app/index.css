@@ -2,19 +2,32 @@ html, body {
   width:  100%;
   height: 100%;
   margin: 0;
+  padding: 0;
 }
+
 header {
-  position: fixed;
   height: 5%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: blue;
 }
+
 header img {
   display: block;
   width: auto;
   height: 5vh;
 }
+
 .header_logo {
   display: table-cell;
 }
+
 main {
 	display: flex;
+}
+
+barcode-reader {
+	width: 100%;
+	height: 75vh;
 }
