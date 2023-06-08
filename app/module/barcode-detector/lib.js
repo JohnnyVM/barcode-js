@@ -1,18 +1,5 @@
 import Module from './zbar.js'
 
-class BarcodeDetector {
-	contructor() {
-		this.instance = Module();
-	}
-
-	// returns a Promise which fulfills with an Array of detected barcodes within an image.
-	detect(image) {
-		// TODO
-	}
-}
-
-
-
 class ZBar {
 	static #instance = null;
 	static #semaphore = false; // meh
@@ -56,10 +43,6 @@ async function scanImage(image) {
     //(this is not really necessary in this example as we could reuse the buffer, but is used to demonstrate how you can manage Wasm heap memory from the js environment)
 	api.destroy_buffer(p);
 
-}
-
-function computeEndVideoScale() {
-	
 }
 
 export { scanImage, ZBar };

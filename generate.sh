@@ -14,7 +14,7 @@ docker run -ti \
 	-sENVIRONMENT=web \
 	--js-library /code/scan.js \
 	-s EXPORTED_RUNTIME_METHODS='["cwrap", "UTF8ToString"]' \
-	-sASSERTIONS -sMODULARIZE -s 'EXPORT_NAME="ZBar"' -s EXPORT_ES6=1 \
+	-sASSERTIONS -sMODULARIZE -s 'EXPORT_NAME="zbar"' -s EXPORT_ES6=1 \
 	-I /src/ZBar/include /code/scan.c /src/ZBar/zbar/.libs/libzbar.a \
 	--cache /tmp \
 	-o zbar.js

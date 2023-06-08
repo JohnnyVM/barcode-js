@@ -6,25 +6,17 @@ customElements.define("product-list", ProductList);
 customElements.define("product-card", ProductCard);
 
 let MediaRequirements = {
-    video: {
-        facingMode: "environment",
-    }
+  audio: false,
+  video: {
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+    facingMode: "environment",
+  }
 };
 
-async function asyncInterval(fn) {
-  return await new Promise(resolve => {
-    const interval = setInterval(() => {
-		fn();
-        clearInterval(interval);
-    }, 333);
-  });
-}
-
-navigator.mediaDevices.getUserMedia(MediaRequirements).then(function(stream) {
+navigator.mediaDevices.getUserMedia(MediaRequirements).then(async function(stream) {
     let barcode = document.getElementsByTagName('barcode-reader')[0];
 
     barcode.srcObject = stream;
-	setInterval(async () => {
-			await barcode.display();
-	}, 300);
+	await barcode.play();
 });
