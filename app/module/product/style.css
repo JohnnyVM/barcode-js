@@ -1,14 +1,17 @@
 .contenedorCard{
+    position: absolute;
     overflow-y: scroll;
     background-color: azure;
-    top: 36vh;
-    height: 65vh;
+    top: 51vh;
+    height: 45vh;
     width: 100%;
-    left: 1%;
+    left: 1px;
 }
 .card-body{
     line-height: 1vh;
 }
 .card-name{
     font-weight: bold;
+    line-height: 1.5vh;
+
 }
