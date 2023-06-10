@@ -73,6 +73,8 @@ class ProductCard extends HTMLElement {
 }
 
 class ProductList extends HTMLElement {
+	#barcodeList = new Set();
+
 	static get observedAttributes() {
 		return [];
 	}
@@ -80,8 +82,7 @@ class ProductList extends HTMLElement {
     attributeChangedCallback(attrName, oldVal, newVal) {
     }
 
-    constructor() {
-        super();
+    constructor() { super();
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.container = document.createElement('div');
 		this.container.classList.add('contenedorCard');
@@ -101,32 +102,30 @@ class ProductList extends HTMLElement {
         });
     }
 
-	findBarcode(bar) {
-		for(const node of this.container.childNodes) {
-			if(node instanceof ProductCard) {
-				let barcode = node.getAttribute('barcode');
-				if(bar === barcode) {
-					return node;
-				}
-			}
-		}
-		return false
-	}
-
 	async addProduct(bar) {
-		let product = this.findBarcode(bar);
-		if(product) {
-			return;
+		if(this.#barcodeList.has(bar)) {
+			return
 		}
+
 		const plist = await fetchProduct(bar);
 		if(plist === null) {
 			console.log("Unknown barcode: " + bar);
 			return;
 		}
+
+		this.#barcodeList.add(bar);
 		plist.forEach((prod) => {
 			let pc = new ProductCard(prod);
-			this.container.appendChild(pc);
+			this.container.prepend(pc);
 		});
+	}
+
+	deleteProductCards() {
+		let children = this.container.children;
+		for (let i = 0; i < children.length; i++) {
+			let child = children[i];
+			// Do stuff
+		}
 	}
 }
 

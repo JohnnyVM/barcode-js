@@ -31,15 +31,19 @@ class BarcodeReader extends HTMLElement {
 	settings = null;
 	#camera;
 	#displayCamera = { canvas: null, crop: null };
+	#barcodeGuide;
 
 	/**
 	 * Calculate the apropiate display position witha a image centred
 	 *
-	 * @param {MediaTrackSettings} Camera settings
+	 * @param {MediaStream} Camera settings
 	 *
 	 * @return {DOMRect} Rectangle indicating the correct position
 	 */
-	#calculateDisplayCameraSection(cameraSettings) {
+	#calculateDisplayCameraSection(stream) {
+		const track = stream.getVideoTracks()[0];
+		const cameraSettings = track.getSettings();
+
 		let x = 0;
 		let y = 0;
 		let boundaries = this.getBoundingClientRect();
@@ -47,6 +51,15 @@ class BarcodeReader extends HTMLElement {
 			x = Math.floor( cameraSettings.width / 2 - boundaries.width / 2 );
 		}
 		return new DOMRect(x, y, boundaries.width, boundaries.height);
+	}
+
+	#drawGuide() {
+		let ctx = this.#barcodeGuide.getContext("2d");
+		ctx.strokeStyle = '#ff0000';
+		ctx.beginPath();
+		ctx.moveTo(this.#barcodeGuide.width / 10, this.#barcodeGuide.height / 2);
+		ctx.lineTo(this.#barcodeGuide.width * 9 / 10, this.#barcodeGuide.height / 2);
+		ctx.stroke();
 	}
 
 	async #startDisplay(time) {
@@ -93,12 +106,10 @@ class BarcodeReader extends HTMLElement {
 	}
 
     set srcObject(stream) {
-		const track = stream.getVideoTracks()[0];
-		const actualSettings = track.getSettings();
-
-		this.#displayCamera.crop = this.#calculateDisplayCameraSection(actualSettings);
-		this.#displayCamera.canvas.width = this.#displayCamera.crop.width;
-		this.#displayCamera.canvas.height = this.#displayCamera.crop.height;
+		this.#displayCamera.crop = this.#calculateDisplayCameraSection(stream);
+		this.setAttribute('width', this.#displayCamera.crop.width);
+		this.setAttribute('height', this.#displayCamera.crop.height);
+		this.#drawGuide();
 
         this.#camera.srcObject = stream;
     }
@@ -109,11 +120,15 @@ class BarcodeReader extends HTMLElement {
 
     attributeChangedCallback(attrName, oldVal, newVal) {
         if(attrName == 'width') {
-            this.mainCanvas.width = newVal;
+            this.#camera.width = newVal;
+            this.#displayCamera.canvas.width = newVal;
+            this.#barcodeGuide.width = newVal;
             return;
         }
         if(attrName == 'height') {
-            this.mainCanvas.height = newVal;
+            this.#camera.height = newVal;
+            this.#displayCamera.canvas.height = newVal;
+            this.#barcodeGuide.height = newVal;
             return;
         }
     }
@@ -130,17 +145,17 @@ class BarcodeReader extends HTMLElement {
 		this.#camera.style.display = 'none';
 
 		this.#displayCamera.canvas = document.createElement("canvas");
+		this.#displayCamera.canvas.id = 'display-camera';
 
-		//remove
-		this.mainCanvas = document.createElement("canvas");
-        this.ctx = this.mainCanvas.getContext("2d", {willReadFrequently: true});
+		this.#barcodeGuide = document.createElement("canvas");
+		this.#barcodeGuide.id = 'barcode-guide';
 
         // Apply external styles to the shadow DOM
         const linkElem = document.createElement("link");
         linkElem.setAttribute("rel", "stylesheet");
         linkElem.setAttribute("href", "module/barcode-detector/style.css");
 
-        this.shadowRoot.append(linkElem, this.#camera, this.#displayCamera.canvas);
+        this.shadowRoot.append(linkElem, this.#camera, this.#displayCamera.canvas, this.#barcodeGuide);
 
         this.constructor.observedAttributes.forEach(element => {
             let attribute = this.getAttribute(element);
