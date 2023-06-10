@@ -89,7 +89,7 @@ class BarcodeReader extends HTMLElement {
 
 			// set the function that should be called whenever a barcode is detected
 			modZBar['processResult'] = async (symbol, data, polygon) => {
-				pl.addProduct(data);
+				await pl.addProduct(data);
 
 				// draw the bounding polygon
 				drawPoly(ctx, polygon)

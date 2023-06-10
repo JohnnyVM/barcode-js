@@ -103,29 +103,33 @@ class ProductList extends HTMLElement {
     }
 
 	async addProduct(bar) {
-		if(this.#barcodeList.has(bar)) {
-			return
-		}
+		navigator.locks.request("product_list", async (lock) => {
+			if(this.#barcodeList.has(bar)) {
+				return
+			}
 
-		const plist = await fetchProduct(bar);
-		if(plist === null) {
-			console.log("Unknown barcode: " + bar);
-			return;
-		}
+			const plist = await fetchProduct(bar);
+			if(plist === null) {
+				console.log("Unknown barcode: " + bar);
+				return;
+			}
 
-		this.#barcodeList.add(bar);
-		plist.forEach((prod) => {
-			let pc = new ProductCard(prod);
-			this.container.prepend(pc);
+			this.#barcodeList.add(bar);
+			plist.forEach((prod) => {
+				let pc = new ProductCard(prod);
+				this.container.prepend(pc);
+			});
 		});
 	}
 
 	deleteProductCards() {
 		let children = this.container.children;
 		for (let i = 0; i < children.length; i++) {
-			let child = children[i];
-			// Do stuff
+			if(children[i] instanceof ProductCard) {
+				children[i].remove();
+			}
 		}
+		this.#barcodeList = new Set();
 	}
 }
 
