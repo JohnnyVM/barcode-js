@@ -63,16 +63,18 @@ class BarcodeReader extends HTMLElement {
 	}
 
 	async #startDisplay(time) {
-		const boundaries = this.#displayCamera.crop;
-		const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false });
-		let img = await createImageBitmap(this.#camera, boundaries.x, boundaries.y, boundaries.width, boundaries.height);
-		ctx.drawImage(img, 0, 0);
-		//ctx.drawImage(this.#camera, 0, 0);
-		// --------------------------------------
-	    const image = ctx.getImageData(0, 0, boundaries.width, boundaries.height);
-		let barcodes = await scanImage(image);
-		// ------------------------------------------------
-		window.requestAnimationFrame(() => { this.#startDisplay(); });
+		try {
+			const boundaries = this.#displayCamera.crop;
+			const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false });
+			let img = await createImageBitmap(this.#camera, boundaries.x, boundaries.y, boundaries.width, boundaries.height);
+			ctx.drawImage(img, 0, 0);
+			// --------------------------------------
+			const image = ctx.getImageData(0, 0, boundaries.width, boundaries.height);
+			let barcodes = await scanImage(image);
+			// ------------------------------------------------
+		} finally {
+			window.requestAnimationFrame(() => { this.#startDisplay(); });
+		}
 	}
 
 	/**
