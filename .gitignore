@@ -1,3 +1,7 @@
 app/module/barcode-detector/zbar.wasm
 app/module/barcode-detector/zbar.js
 app/config.js
+.eslintrc.json
+node_modules/
+package-lock.json
+package.json
