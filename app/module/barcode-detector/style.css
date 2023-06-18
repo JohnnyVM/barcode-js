@@ -5,3 +5,7 @@ canvas {
 #barcode-guide {
 	z-index: 1;
 }
+
+#barcode-display {
+	z-index: 2;
+}

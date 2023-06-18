@@ -1,15 +1,19 @@
 import { Settings } from '../utils.js';
 import { scanImage, ZBar } from './lib.js'
-import Module from './zbar.js'
 
-let modZBar = null
+let modZBar = null;
+let timeout = null;
 
-var cameraWorker = new Blob([
-	"self.onmessage = function(e) {self.postMessage('msg from worker');};"
-], { type: "text/javascript" })
 
-function drawPoly(ctx, poly) {
-// drawPoly expects a flat array of coordinates forming a polygon (e.g. [x1,y1,x2,y2,... etc])
+function drawPoly(canva, poly) {
+	const ctx = canva.getContext('2d');
+
+	if(!timeout) {
+		clearTimeout(timeout);
+		ctx.clearRect(0, 0, canva.width, canva.height);
+		timeout = null;
+	}
+	// drawPoly expects a flat array of coordinates forming a polygon (e.g. [x1,y1,x2,y2,... etc])
 	ctx.beginPath();
 	ctx.moveTo(poly[0], poly[1]);
 	for (let item = 2; item < poly.length - 1; item += 2) { ctx.lineTo(poly[item], poly[item + 1]) }
@@ -18,6 +22,10 @@ function drawPoly(ctx, poly) {
 	ctx.strokeStyle = "#FF0000";
 	ctx.closePath();
 	ctx.stroke();
+	setTimeout(() => {
+		ctx.clearRect(0, 0, canva.width, canva.height);
+		timeout = null;
+	}, 1000);
 }
 
 // render the string contained in the barcode as text on the canvas
@@ -32,6 +40,7 @@ class BarcodeReader extends HTMLElement {
 	#camera;
 	#displayCamera = { canvas: null, crop: null };
 	#barcodeGuide;
+	#barcodeDisplay;
 
 	/**
 	 * Calculate the apropiate display position witha a image centred
@@ -94,17 +103,15 @@ class BarcodeReader extends HTMLElement {
 				await pl.addProduct(data);
 
 				// draw the bounding polygon
-				drawPoly(ctx, polygon)
+				drawPoly(this.#barcodeDisplay, polygon)
 
 				// render the data at the first coordinate of the polygon
 				renderData(ctx, data, polygon[0], polygon[1] - 10)
 			}
 		}
+		// ------------------------------------
 
-		// ------------------------------------------------
-		//this.#camera.addEventListener('loadeddata', () => {
-			this.#startDisplay();
-		//}, { once: true });
+		this.#startDisplay();
 	}
 
     set srcObject(stream) {
@@ -125,12 +132,14 @@ class BarcodeReader extends HTMLElement {
             this.#camera.width = newVal;
             this.#displayCamera.canvas.width = newVal;
             this.#barcodeGuide.width = newVal;
+            this.#barcodeDisplay.width = newVal;
             return;
         }
         if(attrName == 'height') {
             this.#camera.height = newVal;
             this.#displayCamera.canvas.height = newVal;
             this.#barcodeGuide.height = newVal;
+            this.#barcodeDisplay.height = newVal;
             return;
         }
     }
@@ -142,7 +151,7 @@ class BarcodeReader extends HTMLElement {
         // Create a shadow root
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
 
-   		this.#camera = document.createElement("video");
+		this.#camera = document.createElement("video");
 		this.#camera.setAttribute('autoplay', 1);
 		this.#camera.style.display = 'none';
 
@@ -152,12 +161,20 @@ class BarcodeReader extends HTMLElement {
 		this.#barcodeGuide = document.createElement("canvas");
 		this.#barcodeGuide.id = 'barcode-guide';
 
+		this.#barcodeDisplay = document.createElement("canvas");
+		this.#barcodeDisplay.id = 'barcode-display';
+
         // Apply external styles to the shadow DOM
         const linkElem = document.createElement("link");
         linkElem.setAttribute("rel", "stylesheet");
         linkElem.setAttribute("href", "module/barcode-detector/style.css");
 
-        this.shadowRoot.append(linkElem, this.#camera, this.#displayCamera.canvas, this.#barcodeGuide);
+        this.shadowRoot.append(
+			linkElem,
+			this.#camera,
+			this.#displayCamera.canvas,
+			this.#barcodeDisplay,
+			this.#barcodeGuide);
 
         this.constructor.observedAttributes.forEach(element => {
             let attribute = this.getAttribute(element);
