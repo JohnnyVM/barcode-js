@@ -1,4 +1,4 @@
-import { fetchProduct } from './lib.js';
+import {fetchProduct} from './lib.js';
 
 class ProductCard extends HTMLElement {
 	static get observedAttributes() {
@@ -16,9 +16,7 @@ class ProductCard extends HTMLElement {
 	fromObject(obj) {
 		for (let i = 0; i < ProductCard.observedAttributes.length; i++) {
 			let key = ProductCard.observedAttributes[i];
-			if(!key in obj) {
-				continue;
-			}
+			if(!(key in obj)){continue;}
 			if (obj[key] == null){ // si el campo es nulo lo ponemos vacio para que aparezca undefined
 				obj[key] = "";
 			}
@@ -31,7 +29,7 @@ class ProductCard extends HTMLElement {
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.container = document.createElement('div');
 		this.container.classList.add('card');
-        	let body = document.createElement('div');
+			let body = document.createElement('div');
 			this.container.appendChild(body);
 			body.classList.add('card-body');
 				let dname = document.createElement('div');
@@ -79,10 +77,8 @@ class ProductList extends HTMLElement {
 		return [];
 	}
 
-    attributeChangedCallback(attrName, oldVal, newVal) {
-    }
-
-    constructor() { super();
+    constructor() {
+		super();
         this.attachShadow({ mode: "open" }); // sets and returns 'this.shadowRoot'
         this.container = document.createElement('div');
 		this.container.classList.add('contenedorCard');
@@ -103,17 +99,15 @@ class ProductList extends HTMLElement {
     }
 
 	async addProduct(bar) {
-		navigator.locks.request("product_list", async (lock) => {
+		navigator.locks.request("product_list", async () => {
 			if(this.#barcodeList.has(bar)) {
-				return
+				return;
 			}
-
 			const plist = await fetchProduct(bar);
 			if(plist === null) {
 				console.log("Unknown barcode: " + bar);
 				return;
 			}
-
 			this.#barcodeList.add(bar);
 			plist.forEach((prod) => {
 				let pc = new ProductCard(prod);

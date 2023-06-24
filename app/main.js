@@ -14,6 +14,12 @@ let MediaRequirements = {
   }
 };
 
+let clearButton = document.querySelector('#clear-list-button');
+clearButton.addEventListener('click', ()=>{
+	let productList = document.getElementsByTagName('product-list')[0];
+	productList.deleteProductCards();
+});
+
 navigator.mediaDevices.getUserMedia(MediaRequirements).then(async function(stream) {
     let barcode = document.getElementsByTagName('barcode-reader')[0];
 
