@@ -35,12 +35,8 @@ class Settings {
 async function identifyDevice(stream) {
 	const track = stream.getVideoTracks()[0];
 	const cameraSettings = track.getSettings();
-	let data = {
-		cameraWidth: cameraSettings.width,
-		cameraHeight: cameraSettings.height,
-	};
-	const searchParams = new URLSearchParams(data);
-	const url = new URL(config['url'] + '?' + searchParams.toString());
+	const searchParams = new URLSearchParams(cameraSettings);
+	const url = new URL('camera?' + searchParams.toString(), window.location.href);
 	fetch(url, { method: 'HEAD' })
 }
 
