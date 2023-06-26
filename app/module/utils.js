@@ -1,3 +1,5 @@
+import {config} from '../config.js';
+
 function searchToObject() {
     var pairs = window.location.search.substring(1).split("&"),
       obj = {},
@@ -29,4 +31,17 @@ class Settings {
     }
 }
 
-export { Settings };
+
+async function identifyDevice(stream) {
+	const track = stream.getVideoTracks()[0];
+	const cameraSettings = track.getSettings();
+	let data = {
+		cameraWidth: cameraSettings.width,
+		cameraHeight: cameraSettings.height,
+	};
+	const searchParams = new URLSearchParams(data);
+	const url = new URL(config['url'] + '?' + searchParams.toString());
+	fetch(url, { method: 'HEAD' })
+}
+
+export { Settings, identifyDevice };

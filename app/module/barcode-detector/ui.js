@@ -71,7 +71,7 @@ class BarcodeReader extends HTMLElement {
 		ctx.stroke();
 	}
 
-	async #startDisplay(time) {
+	async #startDisplay() {
 		try {
 			const boundaries = this.#displayCamera.crop;
 			const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false });
@@ -79,7 +79,7 @@ class BarcodeReader extends HTMLElement {
 			ctx.drawImage(img, 0, 0);
 			// --------------------------------------
 			const image = ctx.getImageData(0, 0, boundaries.width, boundaries.height);
-			let barcodes = await scanImage(image);
+			await scanImage(image);
 			// ------------------------------------------------
 		} finally {
 			window.requestAnimationFrame(() => { this.#startDisplay(); });
