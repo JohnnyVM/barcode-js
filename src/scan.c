@@ -2,26 +2,19 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <zbar.h>
+#include <threads.h>
 #include "emscripten.h"
 
-#ifdef __cplusplus
-#define EXTERN extern "C"
-#else
-#define EXTERN
-#endif
-
+static once_flag flag = ONCE_FLAG_INIT;
 // External javascript function to pass the retrieved data to.
 extern void js_output_result(const char *symbolName, const char *data, const int *polygon, const unsigned polysize);
 
 zbar_image_scanner_t *scanner = NULL;
+zbar_image_t *image = NULL;
 
 EMSCRIPTEN_KEEPALIVE
-int scan_image(uint8_t *raw, int width, int height)
-{
-	// create the scanner
+void do_once(void) {
     scanner = zbar_image_scanner_create();
-
-    // set the scanner density (function will have nonzero return code on error, check your browser console)
     int x_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_X_DENSITY, 1);
     if(x_density) {
         printf("ALERT: ZBAR_CFG_X_DENSITY %d \n", x_density);
@@ -30,12 +23,35 @@ int scan_image(uint8_t *raw, int width, int height)
     if(y_density) {
         printf("ALERT: ZBAR_CFG_Y_DENSITY %d \n", y_density);
     }
+    image = zbar_image_create();
+    zbar_image_set_format(image, zbar_fourcc('Y', '8', '0', '0'));
+}
+
+EMSCRIPTEN_KEEPALIVE
+void dummy_free(struct zbar_image_s *dummy) {}
+
+
+EMSCRIPTEN_KEEPALIVE
+int scan_image(uint8_t *raw, int width, int height)
+{
+	// create the scanner
+	call_once(&flag, do_once);
+
+    // set the scanner density (function will have nonzero return code on error, check your browser console)
+    //int x_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_X_DENSITY, 1);
+    //if(x_density) {
+    //    printf("ALERT: ZBAR_CFG_X_DENSITY %d \n", x_density);
+    //}
+    //int y_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_Y_DENSITY, 2);
+    //if(y_density) {
+    //    printf("ALERT: ZBAR_CFG_Y_DENSITY %d \n", y_density);
+    //}
 
 	// hydrate a zbar image struct with the image data.
-    zbar_image_t *image = zbar_image_create();
-    zbar_image_set_format(image, zbar_fourcc('Y', '8', '0', '0'));
+    // zbar_image_t *image = zbar_image_create();
+    // zbar_image_set_format(image, zbar_fourcc('Y', '8', '0', '0'));
     zbar_image_set_size(image, width, height);
-    zbar_image_set_data(image, raw, width * height, zbar_image_free_data);
+    zbar_image_set_data(image, raw, width * height, dummy_free);
 
 	// scan the image for barcodes
     int n = zbar_scan_image(scanner, image);
@@ -66,8 +82,8 @@ int scan_image(uint8_t *raw, int width, int height)
     }
 
 	// clean up
-    zbar_image_destroy(image);
-    zbar_image_scanner_destroy(scanner);
+    // zbar_image_destroy(image);
+	// zbar_image_scanner_destroy(scanner);
 
     return (0);
 }

@@ -2,6 +2,10 @@
 
 # Docker command docker build --no-cache --tag barcodejs:latest --build-arg=uid=$(id -u) .
 
+FLAGS="-O3 -flto"
+#FLAGS="-sASSERTIONS -fsanitize=null -fsanitize=address"
+#FLAGS="-sSAFE_HEAP -sASSERTIONS"
+
 docker run -ti \
 	-v /tmp:/tmp \
 	-v $(pwd)/src:/code \
@@ -10,11 +14,12 @@ docker run -ti \
 	--workdir /output \
 	--entrypoint emcc \
 	barcodejs:latest \
-	-O3 -fno-exceptions -sFILESYSTEM=0 -flto -s WASM=1 -v \
+	-fno-exceptions -sFILESYSTEM=0 -s WASM=1 -v \
 	-sENVIRONMENT=web \
 	--js-library /code/scan.js \
 	-s EXPORTED_RUNTIME_METHODS='["cwrap", "UTF8ToString"]' \
-	-sASSERTIONS -sMODULARIZE -s 'EXPORT_NAME="zbar"' -s EXPORT_ES6=1 \
+	-sMODULARIZE -s 'EXPORT_NAME="zbar"' -s EXPORT_ES6=1 \
 	-I /src/ZBar/include /code/scan.c /src/ZBar/zbar/.libs/libzbar.a \
 	--cache /tmp \
+	${FLAGS} \
 	-o zbar.js
