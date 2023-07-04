@@ -43,10 +43,10 @@ product-list {
 }
 
 footer {
+  position: fixed;
   top: 95vh;
   height: 5vh;
   width: 100%;
-  position: fixed;
 }
 
 button {
