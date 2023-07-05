@@ -23,6 +23,8 @@ void do_once(void) {
     if(y_density) {
         printf("ALERT: ZBAR_CFG_Y_DENSITY %d \n", y_density);
     }
+
+    // hydrate a zbar image struct with the image data.
     image = zbar_image_create();
     zbar_image_set_format(image, zbar_fourcc('Y', '8', '0', '0'));
 }
@@ -37,19 +39,6 @@ int scan_image(uint8_t *raw, int width, int height)
 	// create the scanner
 	call_once(&flag, do_once);
 
-    // set the scanner density (function will have nonzero return code on error, check your browser console)
-    //int x_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_X_DENSITY, 1);
-    //if(x_density) {
-    //    printf("ALERT: ZBAR_CFG_X_DENSITY %d \n", x_density);
-    //}
-    //int y_density = zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_Y_DENSITY, 2);
-    //if(y_density) {
-    //    printf("ALERT: ZBAR_CFG_Y_DENSITY %d \n", y_density);
-    //}
-
-	// hydrate a zbar image struct with the image data.
-    // zbar_image_t *image = zbar_image_create();
-    // zbar_image_set_format(image, zbar_fourcc('Y', '8', '0', '0'));
     zbar_image_set_size(image, width, height);
     zbar_image_set_data(image, raw, width * height, dummy_free);
 
@@ -80,10 +69,6 @@ int scan_image(uint8_t *raw, int width, int height)
         // Output the result to the javascript environment
         js_output_result(zbar_get_symbol_name(typ), data, poly, poly_size);
     }
-
-	// clean up
-    // zbar_image_destroy(image);
-	// zbar_image_scanner_destroy(scanner);
 
     return (0);
 }
