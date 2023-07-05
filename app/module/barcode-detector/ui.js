@@ -39,27 +39,41 @@ class BarcodeReader extends HTMLElement {
 	settings = null;
 	#camera;
 	#displayCamera = { canvas: null, crop: null };
+	#imageCrop;
+	#imageScale;
 	#barcodeGuide;
 	#barcodeDisplay;
 
 	/**
-	 * Calculate the apropiate display position witha a image centred
+	 * Calculate the apropiate display position with a image centred
+	 * The displayed image is the 20% of the image if boundaries width < 20% image width
 	 *
-	 * @param {MediaStream} Camera settings
+	 * @param {DOMRect} boundaries - Camera settings
+	 * @param {MediaDisplay} imageSize - Camera settings
 	 *
 	 * @return {DOMRect} Rectangle indicating the correct position
 	 */
-	#calculateDisplayCameraSection(stream) {
-		const track = stream.getVideoTracks()[0];
-		const cameraSettings = track.getSettings();
-
+	#calculateImageSection(boundaries, cameraSize) {
 		let x = 0;
 		let y = 0;
-		let boundaries = this.getBoundingClientRect();
-		if(boundaries.width < cameraSettings.width) {
-			x = Math.floor( cameraSettings.width / 2 - boundaries.width / 2 );
+		let width = boundaries.width;
+		let height = boundaries.height;
+		const referenceBoundaryWidth = 400;
+		const referenceImageWidth = 1920;
+		let scale = 1;
+		if(boundaries.width > cameraSize.width) {
+			// TODO center image
+			return {crop: new DOMRect(x, y, width, height), scale: [1, 1]};
 		}
-		return new DOMRect(x, y, boundaries.width, boundaries.height);
+		// TODO avoid magic numbers
+		if((referenceBoundaryWidth/referenceImageWidth) < (boundaries.width/cameraSize.width)) {
+			x = Math.floor( cameraSize.width / 2 - width / 2 );
+			return {crop: new DOMRect(x, y, width, height), scale: [1, 1]};
+		}
+		width = referenceBoundaryWidth/referenceImageWidth * cameraSize.width;
+		x = Math.floor( width / 2 - boundaries.width / 2 );
+		scale = boundaries.width / width;
+		return {crop: new DOMRect(x, y, width, height), scale: [scale, scale]};
 	}
 
 	#drawGuide() {
@@ -73,7 +87,8 @@ class BarcodeReader extends HTMLElement {
 
 	async #startDisplay() {
 		try {
-			const boundaries = this.#displayCamera.crop;
+			// get ImageBitmap (cropped)
+			const boundaries = this.#imageCrop;
 			const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false });
 			let img = await createImageBitmap(this.#camera, boundaries.x, boundaries.y, boundaries.width, boundaries.height);
 			ctx.drawImage(img, 0, 0);
@@ -115,9 +130,14 @@ class BarcodeReader extends HTMLElement {
 	}
 
     set srcObject(stream) {
-		this.#displayCamera.crop = this.#calculateDisplayCameraSection(stream);
-		this.setAttribute('width', this.#displayCamera.crop.width);
-		this.setAttribute('height', this.#displayCamera.crop.height);
+		let boundaries = this.getBoundingClientRect();
+		this.setAttribute('width', boundaries.width);
+		this.setAttribute('height', boundaries.height);
+		const track = stream.getVideoTracks()[0];
+		const cameraSettings = track.getSettings();
+		let {crop, scale} = this.#calculateImageSection(boundaries, cameraSettings);
+		this.#imageCrop = crop;
+		this.#imageScale = scale;
 		this.#drawGuide();
 
         this.#camera.srcObject = stream;

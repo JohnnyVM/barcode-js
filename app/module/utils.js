@@ -1,5 +1,3 @@
-import {config} from '../config.js';
-
 function searchToObject() {
     var pairs = window.location.search.substring(1).split("&"),
       obj = {},
@@ -17,16 +15,18 @@ function searchToObject() {
 }
 
 class Settings {
+	#debug = false
+
     get debug() {
-        return this.debug_cache;
+        return this.#debug;
     }
 
     constructor() {
         let query = searchToObject();
         if (typeof query.debug === 'undefined') {
-            this.debug_cache = false;
+            this.#debug = false;
         } else {
-            this.debug_cache = (query.debug.toLowerCase() === 'true' || query.debug === '1');
+            this.#debug = (query.debug.toLowerCase() === 'true' || query.debug === '1');
         }
     }
 }

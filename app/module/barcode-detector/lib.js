@@ -2,13 +2,11 @@ import Module from './zbar.js'
 
 class ZBar {
 	static #instance = null;
-	static #semaphore = false; // meh
 
 	constructor() {}
 
 	static async getInstance() {
-		if(this.#instance === null && !this.#semaphore) {
-			this.#semaphore = true;
+		if(this.#instance === null) {
 			this.#instance = await Module();
 		}
 		return this.#instance;
