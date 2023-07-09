@@ -16,7 +16,9 @@ function drawPoly(canva, poly) {
 	// drawPoly expects a flat array of coordinates forming a polygon (e.g. [x1,y1,x2,y2,... etc])
 	ctx.beginPath();
 	ctx.moveTo(poly[0], poly[1]);
-	for (let item = 2; item < poly.length - 1; item += 2) { ctx.lineTo(poly[item], poly[item + 1]) }
+	for (let item = 2; item < poly.length - 1; item += 2) {
+		ctx.lineTo(poly[item], poly[item + 1])
+	}
 
 	ctx.lineWidth = 2;
 	ctx.strokeStyle = "#FF0000";
@@ -40,7 +42,6 @@ class BarcodeReader extends HTMLElement {
 	#camera;
 	#displayCamera;
 	#imageCrop;
-	#imageScale;
 	#barcodeGuide;
 	#barcodeDisplay;
 
@@ -58,22 +59,12 @@ class BarcodeReader extends HTMLElement {
 		let y = 0;
 		let width = boundaries.width;
 		let height = boundaries.height;
-		const referenceBoundaryWidth = 400;
-		const referenceImageWidth = 1920;
-		let scale = 1;
-		if(boundaries.width > cameraSize.width) {
+		if(width > cameraSize.width) {
 			// TODO center image
-			return {crop: new DOMRect(x, y, width, height), scale: [1, 1]};
+			return new DOMRect(x, y, width, height);
 		}
-		// TODO avoid magic numbers
-		if((referenceBoundaryWidth/referenceImageWidth) < (boundaries.width/cameraSize.width)) {
-			x = Math.floor( cameraSize.width / 2 - width / 2 );
-			return {crop: new DOMRect(x, y, width, height), scale: [1, 1]};
-		}
-		width = referenceBoundaryWidth/referenceImageWidth * cameraSize.width;
-		x = Math.floor( width / 2 - boundaries.width / 2 );
-		scale = boundaries.width / width;
-		return {crop: new DOMRect(x, y, width, height), scale: [scale, scale]};
+		x = Math.floor( cameraSize.width / 2 - boundaries.width / 2 );
+		return new DOMRect(x, y, cameraSize.width, cameraSize.height);
 	}
 
 	#drawGuide() {
@@ -88,12 +79,12 @@ class BarcodeReader extends HTMLElement {
 	async #startDisplay() {
 		try {
 			// get ImageBitmap (cropped)
-			const boundaries = this.#imageCrop;
+			const imageCrop = this.#imageCrop;
 			const ctx = this.#displayCamera.getContext('2d', { willReadFrequently: true, alpha: false });
-			let img = await createImageBitmap(this.#camera, boundaries.x, boundaries.y, boundaries.width, boundaries.height);
+			let img = await createImageBitmap(this.#camera, imageCrop.x, imageCrop.y, imageCrop.width, imageCrop.height);
 			ctx.drawImage(img, 0, 0);
 			// --------------------------------------
-			const image = ctx.getImageData(0, 0, boundaries.width, boundaries.height);
+			const image = ctx.getImageData(0, 0, imageCrop.width, imageCrop.height);
 			await scanImage(image);
 			// ------------------------------------------------
 		} finally {
@@ -133,11 +124,7 @@ class BarcodeReader extends HTMLElement {
 		let boundaries = this.getBoundingClientRect();
 		this.setAttribute('width', boundaries.width);
 		this.setAttribute('height', boundaries.height);
-		const track = stream.getVideoTracks()[0];
-		const cameraSettings = track.getSettings();
-		let {crop, scale} = this.#calculateImageSection(boundaries, cameraSettings);
-		this.#imageCrop = crop;
-		this.#imageScale = scale;
+		this.#imageCrop = this.#calculateImageSection(boundaries, this.#displayCamera);
 		this.#drawGuide();
 
         this.#camera.srcObject = stream;
@@ -149,23 +136,24 @@ class BarcodeReader extends HTMLElement {
 
     attributeChangedCallback(attrName, oldVal, newVal) {
 		const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
-		const ctx = this.#barcodeDisplay.getContext('2d', {willReadFrequently: true})
+		const ctxCamera = this.#displayCamera.getContext('2d', {willReadFrequently: true})
         if(attrName == 'width') {
             this.#camera.width = newVal;
-            this.#displayCamera.width = newVal;
+            // this.#displayCamera.width = newVal;
+            this.#displayCamera.style.width = `${newVal}px`;
+			this.#displayCamera.width = Math.floor(newVal * scale);
             this.#barcodeGuide.width = newVal;
-            this.#barcodeDisplay.style.width = `${newVal}px`;
-			this.#barcodeDisplay.width = Math.floor(newVal * scale);
-			ctx.scale(scale, scale)
+			this.#barcodeDisplay.width = newVal;
+			ctxCamera.scale(scale, scale)
             return;
         }
         if(attrName == 'height') {
             this.#camera.height = newVal;
-            this.#displayCamera.height = newVal;
+            // this.#displayCamera.height = newVal;
+            this.#displayCamera.style.height = `${newVal}px`;
+			this.#displayCamera.height = Math.floor(newVal * scale);
             this.#barcodeGuide.height = newVal;
-            this.#barcodeDisplay.style.height = `${newVal}px`;
-			this.#barcodeDisplay.height = Math.floor(newVal * scale);
-			ctx.scale(scale, scale)
+			ctxCamera.scale(scale, scale)
             return;
         }
     }
