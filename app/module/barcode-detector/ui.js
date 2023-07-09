@@ -38,7 +38,7 @@ function renderData(ctx, data, x, y) {
 class BarcodeReader extends HTMLElement {
 	settings = null;
 	#camera;
-	#displayCamera = { canvas: null, crop: null };
+	#displayCamera;
 	#imageCrop;
 	#imageScale;
 	#barcodeGuide;
@@ -89,7 +89,7 @@ class BarcodeReader extends HTMLElement {
 		try {
 			// get ImageBitmap (cropped)
 			const boundaries = this.#imageCrop;
-			const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false });
+			const ctx = this.#displayCamera.getContext('2d', { willReadFrequently: true, alpha: false });
 			let img = await createImageBitmap(this.#camera, boundaries.x, boundaries.y, boundaries.width, boundaries.height);
 			ctx.drawImage(img, 0, 0);
 			// --------------------------------------
@@ -110,7 +110,7 @@ class BarcodeReader extends HTMLElement {
 		// ------------------------------------
 		if(modZBar === null) {
 			modZBar = await ZBar.getInstance();
-			const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false });
+			const ctx = this.#displayCamera.getContext('2d', { willReadFrequently: true, alpha: false });
 			let pl = document.querySelector('product-list');
 
 			// set the function that should be called whenever a barcode is detected
@@ -148,18 +148,24 @@ class BarcodeReader extends HTMLElement {
 	}
 
     attributeChangedCallback(attrName, oldVal, newVal) {
+		const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
+		const ctx = this.#barcodeDisplay.getContext('2d', {willReadFrequently: true})
         if(attrName == 'width') {
             this.#camera.width = newVal;
-            this.#displayCamera.canvas.width = newVal;
+            this.#displayCamera.width = newVal;
             this.#barcodeGuide.width = newVal;
-            this.#barcodeDisplay.width = newVal;
+            this.#barcodeDisplay.style.width = `${newVal}px`;
+			this.#barcodeDisplay.width = Math.floor(newVal * scale);
+			ctx.scale(scale, scale)
             return;
         }
         if(attrName == 'height') {
             this.#camera.height = newVal;
-            this.#displayCamera.canvas.height = newVal;
+            this.#displayCamera.height = newVal;
             this.#barcodeGuide.height = newVal;
-            this.#barcodeDisplay.height = newVal;
+            this.#barcodeDisplay.style.height = `${newVal}px`;
+			this.#barcodeDisplay.height = Math.floor(newVal * scale);
+			ctx.scale(scale, scale)
             return;
         }
     }
@@ -175,8 +181,8 @@ class BarcodeReader extends HTMLElement {
 		this.#camera.setAttribute('autoplay', 1);
 		this.#camera.style.display = 'none';
 
-		this.#displayCamera.canvas = document.createElement("canvas");
-		this.#displayCamera.canvas.id = 'display-camera';
+		this.#displayCamera = document.createElement("canvas");
+		this.#displayCamera.id = 'display-camera';
 
 		this.#barcodeGuide = document.createElement("canvas");
 		this.#barcodeGuide.id = 'barcode-guide';
@@ -192,7 +198,7 @@ class BarcodeReader extends HTMLElement {
         this.shadowRoot.append(
 			linkElem,
 			this.#camera,
-			this.#displayCamera.canvas,
+			this.#displayCamera,
 			this.#barcodeDisplay,
 			this.#barcodeGuide);
 

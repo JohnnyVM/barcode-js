@@ -35,6 +35,7 @@ class Settings {
 async function identifyDevice(stream) {
 	const track = stream.getVideoTracks()[0];
 	const cameraSettings = track.getSettings();
+	cameraSettings.devicePixelRatio = window.devicePixelRatio;
 	const searchParams = new URLSearchParams(cameraSettings);
 	const url = new URL('camera?' + searchParams.toString(), window.location.href);
 	fetch(url, { method: 'HEAD' })
