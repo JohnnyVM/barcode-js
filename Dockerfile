@@ -16,8 +16,12 @@ USER ${uid}:${gid}
 
 RUN cd /src \
     && git clone https://github.com/mchehab/zbar.git \
-    && cd ZBar \
+    && cd zbar \
     && sed -i "s/ -Werror//" $(pwd)/configure.ac \
     && autoreconf -i \
     && emconfigure ./configure --without-x --without-jpeg --without-imagemagick --without-npapi --without-gtk --without-python --without-qt --without-xshm --disable-video --disable-pthread \
     && emmake make
+
+RUN cd /
+COPY ./entrypoint.sh /entrypoint.sh
+ENTRYPOINT 
