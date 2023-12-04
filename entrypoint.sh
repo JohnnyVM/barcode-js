@@ -2,9 +2,21 @@
 
 # automatically compile the program
 CC=emcc
-INCLUDES="-isystem /src/zbar/include"
-LIBS="-L/src/zbar/zbar/.libs/ -l:libzbar.a"
 PROJECT_PATH="/code/"
+INCLUDES="-isystem /src/zbar/include"
+CLIBS="-L/src/zbar/zbar/.libs/ -l:libzbar.a"
+JSLIBS="--js-library /code/scan.js"
 SOURCE="scan.c"
-OUTPUT="zbar.js"
-${CC} ${INCLUDES} ${LIBS} ${PROJECT_PATH}/${SOURCE} -o ${OUTPUT}
+OUTPUT="/output/zbar.js"
+
+action=$1; shift
+FLAGS="-s MODULARIZE=1 -s EXPORT_NAME='zbar' -s EXPORT_ES6=1"
+if echo $action | grep -q "^dev"; then
+	FLAGS= "${FLAGS} -g3 --tracing -sASSERTIONS -fsanitize=null -fsanitize=address"
+fi
+if echo $action | grep -q "^release"; then
+	FLAGS="${FLAGS} -O3 -flto"
+fi
+
+echo "${CC} ${FLAGS} ${JSLIBS} ${INCLUDES} ${CLIBS} ${PROJECT_PATH}/${SOURCE} -o ${OUTPUT}"
+${CC} ${FLAGS} ${JSLIBS} ${INCLUDES} ${CLIBS} ${PROJECT_PATH}/${SOURCE} -o ${OUTPUT}

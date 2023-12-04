@@ -24,4 +24,4 @@ RUN cd /src \
 
 RUN cd /
 COPY ./entrypoint.sh /entrypoint.sh
-ENTRYPOINT 
+ENTRYPOINT ["/entrypoint.sh"]
