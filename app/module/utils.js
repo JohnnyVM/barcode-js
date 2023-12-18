@@ -1,43 +1,42 @@
-import {config} from '../config.js';
+import { config } from '../config.js'
 
-function searchToObject() {
-    var pairs = window.location.search.substring(1).split("&"),
-      obj = {},
-      pair,
-      i;
+function searchToObject () {
+  const pairs = window.location.search.substring(1).split('&')
+  const obj = {}
+  let pair
+  let i
 
-    for ( i in pairs ) {
-      if ( pairs[i] === "" ) continue;
+  for (i in pairs) {
+    if (pairs[i] === '') continue
 
-      pair = pairs[i].split("=");
-      obj[ decodeURIComponent( pair[0] ) ] = decodeURIComponent( pair[1] );
-    }
+    pair = pairs[i].split('=')
+    obj[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1])
+  }
 
-    return obj;
+  return obj
 }
 
 class Settings {
-    get debug() {
-        return this.debug_cache;
-    }
+  get debug () {
+    return this.debug_cache
+  }
 
-    constructor() {
-        let query = searchToObject();
-        if (typeof query.debug === 'undefined') {
-            this.debug_cache = false;
-        } else {
-            this.debug_cache = (query.debug.toLowerCase() === 'true' || query.debug === '1');
-        }
+  constructor () {
+    const query = searchToObject()
+    if (typeof query.debug === 'undefined') {
+      this.debug_cache = false
+    } else {
+      this.debug_cache = (query.debug.toLowerCase() === 'true' || query.debug === '1')
     }
+  }
 }
 
-
-async function identifyDevice(stream) {
-	const track = stream.getVideoTracks()[0];
-	const cameraSettings = track.getSettings();
-	const searchParams = new URLSearchParams(cameraSettings);
-	const url = new URL('camera?' + searchParams.toString(), window.location.href);
-	fetch(url, { method: 'HEAD' })
+async function identifyDevice (stream) {
+  const track = stream.getVideoTracks()[0]
+  const cameraSettings = track.getSettings()
+  const searchParams = new URLSearchParams(cameraSettings)
+  const url = new URL('camera?' + searchParams.toString(), window.location.href)
+  fetch(url, { method: 'HEAD' })
 }
 
-export { Settings, identifyDevice };
+export { Settings, identifyDevice }

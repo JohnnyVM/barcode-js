@@ -4,8 +4,6 @@ class ZBar {
   static #instance = null
   static #semaphore = false // meh
 
-  constructor () {}
-
   static async getInstance () {
     if (this.#instance === null && !this.#semaphore) {
       this.#semaphore = true

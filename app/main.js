@@ -1,8 +1,8 @@
-import { BarcodeReader } from './module/barcode-detector/ui.js'
+import { BarcodeDisplay } from './module/barcode-detector/ui.js'
 import { ProductList, ProductCard } from './module/product/ui.js'
 import { identifyDevice } from './module/utils.js'
 
-customElements.define('barcode-reader', BarcodeReader)
+customElements.define('barcode-display', BarcodeDisplay)
 customElements.define('product-list', ProductList)
 customElements.define('product-card', ProductCard)
 
