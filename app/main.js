@@ -22,6 +22,14 @@ clearButton.addEventListener('click', () => {
 })
 
 navigator.mediaDevices.getUserMedia(MediaRequirements).then(async function (stream) {
+  // -------------------
+  const header = document.getElementById('camera-info')
+
+  const track = stream.getVideoTracks()[0]
+  const cameraSettings = track.getSettings()
+
+  header.textContent = `${cameraSettings.width}x${cameraSettings.height}`
+  // ------------------
   const barcode = document.getElementsByTagName('barcode-reader')[0]
   identifyDevice(stream)
   barcode.srcObject = stream
