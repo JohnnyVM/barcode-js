@@ -1,15 +1,13 @@
-import Module from './zbar.js'
+import zbar from './zbar.js'
 
 class ZBar {
   static #instance = null
   static #semaphore = false // meh
 
-  constructor () {}
-
   static async getInstance () {
     if (this.#instance === null && !this.#semaphore) {
       this.#semaphore = true
-      this.#instance = await Module()
+      this.#instance = await zbar()
     }
     return this.#instance
   }

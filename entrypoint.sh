@@ -10,7 +10,7 @@ SOURCE="scan.c"
 OUTPUT="/output/zbar.js"
 
 action=$1; shift
-FLAGS="-s MODULARIZE=1 -s EXPORT_NAME='zbar' -s EXPORT_ES6=1"
+FLAGS="-sMODULARIZE -s EXPORT_NAME='zbar' -s EXPORT_ES6=1 -s EXPORTED_RUNTIME_METHODS=cwrap,UTF8ToString"
 if echo $action | grep -q "^dev"; then
 	FLAGS= "${FLAGS} -g3 --tracing -sASSERTIONS -fsanitize=null -fsanitize=address"
 fi

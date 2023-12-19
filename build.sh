@@ -1,6 +1,5 @@
 #!/bin/env bash
 
-# Docker command docker build --no-cache --tag barcodejs:latest --build-arg=uid=$(id -u) .
 CONTAINER_ENGINE=""
 if $(command -v podman >/dev/null 2>&1); then
 	CONTAINER_ENGINE="podman"
@@ -9,6 +8,10 @@ else
 fi
 
 if [ "$#" -gt 0 ]; then
+	if echo "$1" | grep -q "^image$"; then
+		${CONTAINER_ENGINE} build --no-cache --tag barcodejs:latest --build-arg=uid=$(id -u) .
+		exit 0
+	fi
 	if echo "$1" | grep -q "^clean"; then
 		rm app/module/barcode-detector/zbar.*
 		exit 0
