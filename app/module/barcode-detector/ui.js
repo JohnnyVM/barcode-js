@@ -1,4 +1,3 @@
-import { Settings } from '../utils.js'
 import { scanImage, ZBar } from './lib.js'
 
 let modZBar = null
@@ -35,7 +34,6 @@ function renderData (ctx, data, x, y) {
 }
 
 class BarcodeReader extends HTMLElement {
-  settings = null
   #camera
   #displayCamera = { canvas: null, crop: null }
   #barcodeGuide
@@ -147,7 +145,6 @@ class BarcodeReader extends HTMLElement {
 
   constructor () {
     super()
-    this.settings = new Settings()
 
     // Create a shadow root
     this.attachShadow({ mode: 'open' }) // sets and returns 'this.shadowRoot'
