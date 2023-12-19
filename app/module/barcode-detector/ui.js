@@ -42,12 +42,12 @@ class BarcodeReader extends HTMLElement {
   #barcodeDisplay
 
   /**
-	 * Calculate the apropiate display position witha a image centred
-	 *
-	 * @param {MediaStream} Camera settings
-	 *
-	 * @return {DOMRect} Rectangle indicating the correct position
-	 */
+   * Calculate the apropiate display position witha a image centred
+   *
+   * @param {MediaStream} Camera settings
+   *
+   * @return {DOMRect} Rectangle indicating the correct position
+   */
   #calculateDisplayCameraSection (stream) {
     const track = stream.getVideoTracks()[0]
     const cameraSettings = track.getSettings()
@@ -75,6 +75,9 @@ class BarcodeReader extends HTMLElement {
       const boundaries = this.#displayCamera.crop
       const ctx = this.#displayCamera.canvas.getContext('2d', { willReadFrequently: true, alpha: false })
       const img = await createImageBitmap(this.#camera, boundaries.x, boundaries.y, boundaries.width, boundaries.height)
+        .catch((err) => {
+          console.log(err)
+        })
       ctx.drawImage(img, 0, 0)
       // --------------------------------------
       const image = ctx.getImageData(0, 0, boundaries.width, boundaries.height)
@@ -86,10 +89,10 @@ class BarcodeReader extends HTMLElement {
   }
 
   /**
-	 * display the cropped image
-	 *
-	 * @param {DOMRect} Camera settings
-	 */
+   * display the cropped image
+   *
+   * @param {DOMRect} Camera settings
+   */
   async play () {
     // ------------------------------------
     if (modZBar === null) {
@@ -127,14 +130,14 @@ class BarcodeReader extends HTMLElement {
   }
 
   attributeChangedCallback (attrName, oldVal, newVal) {
-    if (attrName == 'width') {
+    if (attrName === 'width') {
       this.#camera.width = newVal
       this.#displayCamera.canvas.width = newVal
       this.#barcodeGuide.width = newVal
       this.#barcodeDisplay.width = newVal
       return
     }
-    if (attrName == 'height') {
+    if (attrName === 'height') {
       this.#camera.height = newVal
       this.#displayCamera.canvas.height = newVal
       this.#barcodeGuide.height = newVal
@@ -150,7 +153,7 @@ class BarcodeReader extends HTMLElement {
     this.attachShadow({ mode: 'open' }) // sets and returns 'this.shadowRoot'
 
     this.#camera = document.createElement('video')
-    this.#camera.setAttribute('autoplay', 1)
+    this.#camera.setAttribute('autoplay', '1')
     this.#camera.style.display = 'none'
 
     this.#displayCamera.canvas = document.createElement('canvas')
