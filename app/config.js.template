@@ -1,5 +1,6 @@
 const config = {
-	"url": "https://example.com",
+  url: "https://example.com",
+  debug: true
 }
 
 export {config};
