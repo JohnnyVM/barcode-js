@@ -1,6 +1,0 @@
-const config = {
-  url: "https://example.com",
-  debug: true
-}
-
-export {config};
