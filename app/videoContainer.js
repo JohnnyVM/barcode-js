@@ -1,5 +1,10 @@
 class VideoContainer extends HTMLElement {
-    constructor() {
+/**
+ * Creates an instance of VideoContainer.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.video = document.createElement('video');
         this.video.setAttribute('id', 'video');
@@ -16,11 +21,18 @@ class VideoContainer extends HTMLElement {
         this.appendChild(overlay);
     }
 
-    connectedCallback() {
+/** ${1:Description placeholder} */
+connectedCallback() {
         this.startCamera();
     }
 
-    async startCamera() {
+/**
+ * ${1:Description placeholder}
+ *
+ * @async
+ * @returns {${2:*}}
+ */
+async startCamera() {
         try {
             const video = document.createElement('video');
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });

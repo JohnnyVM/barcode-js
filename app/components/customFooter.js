@@ -1,4 +1,16 @@
+/**
+ * ${1:Description placeholder}
+ *
+ * @class CustomFooter
+ * @typedef {CustomFooter}
+ * @extends {HTMLElement}
+ */
 class CustomFooter extends HTMLElement {
+    /**
+     * Creates an instance of CustomFooter.
+     *
+     * @constructor
+     */
     constructor() {
         super();
         const footer = document.createElement('footer');
@@ -21,10 +33,12 @@ class CustomFooter extends HTMLElement {
         this.menuButton.addEventListener('click', this.handleMenuClick.bind(this));
     }
 
+    /** ${1:Description placeholder} */
     handleCartClick() {
         document.querySelector('custom-modal#cart-modal').show();
     }
 
+    /** ${1:Description placeholder} */
     handleMenuClick() {
         document.querySelector('custom-drawer#menu-drawer').show();
     }

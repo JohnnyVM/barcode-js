@@ -1,4 +1,16 @@
-class CustomModal extends HTMLElement {
+/**
+ * ${1:Description placeholder}
+ *
+ * @class CustomModal
+ * @typedef {CustomModal}
+ * @extends {HTMLElement}
+ */
+class modalCart extends HTMLElement {
+/**
+ * Creates an instance of CustomModal.
+ *
+ * @constructor
+ */
     constructor() {
         super();
         const modalContent = document.createElement('div');
@@ -16,13 +28,16 @@ class CustomModal extends HTMLElement {
         this.closeButton.addEventListener('click', () => this.hide());
     }
 
+    /** ${1:Description placeholder} */
     show() {
         this.style.display = 'flex';
     }
 
+    /** ${1:Description placeholder} */
     hide() {
         this.style.display = 'none';
     }
+
 }
 
 customElements.define('custom-modal', CustomModal);
