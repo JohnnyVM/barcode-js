@@ -6,6 +6,9 @@ import { CameraPort } from '../interfaces/cameraPort.js'
  * @extends CameraPort
  */
 export class VideoAdapter extends CameraPort {
+  /**
+   * @param {HTMLMediaElement} videoElement - Video element
+   */
   constructor (videoElement) {
     super()
     this.videoElement = videoElement

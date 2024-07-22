@@ -6,8 +6,8 @@ export class BarcodeScanner {
    * Creates an instance of BarcodeScanner.
    *
    * @constructor
-   * @param {${1:*}} cameraPort
-   * @param {${2:*}} imageDataPort
+   * @param {CameraPort} cameraPort
+   * @param {ImageDataPort} imageDataPort
    */
   constructor (cameraPort, imageDataPort) {
     this.cameraPort = cameraPort
@@ -46,7 +46,8 @@ export class BarcodeScanner {
     if (!this.isScanning) return
 
     const imageData = await this.cameraPort.captureFrame()
-    const barcode = this.imageDataPort.detectBarcode(imageData)
+    //const barcode = this.imageDataPort.detectBarcode(imageData)
+    const barcode = false;
 
     if (barcode && this.onBarcodeDetected) {
       this.onBarcodeDetected(barcode)

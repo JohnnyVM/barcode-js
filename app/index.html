@@ -6,28 +6,13 @@
     <title>Barcode Scanner</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-    <style>
-        body, html { height: 100%; margin: 0; }
-        video { width: 100%; height: 100vh; object-fit: cover; }
-        .custom-footer { display: flex; justify-content: center; padding: 16px; }
-        .custom-footer .company-icon { width: 50px; height: auto; }
-        .modal-cart, .menu-drawer { position: fixed; top: 0; right: 0; width: 300px; height: 100%; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .modal-cart { display: none; }
-        .menu-drawer { display: none; }
-        .drawer-content { padding: 16px; }
-        .drawer-content ul { list-style: none; padding: 0; }
-        .drawer-content li { margin-bottom: 8px; }
-    </style>
-    <script defer type="module" src="main.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <script defer type="module" src="index.js"></script>
 </head>
 <body>
-    <video-container>
-        <video autoplay></video>
-    </video-container>
+    <video-container></video-container>
 
     <custom-footer></custom-footer>
-    <custom-modal-cart></custom-modal-cart>
-    <custom-menu-drawer></custom-menu-drawer>
 
 </body>
 </html>
