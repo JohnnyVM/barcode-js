@@ -3,6 +3,12 @@
  */
 export class BarcodeScanner {
   /**
+   * Barcode detector callback
+   * @type {function(Object):void}
+   */
+  onBarcodeDetected
+
+  /**
    * Creates an instance of BarcodeScanner.
    *
    * @constructor
@@ -17,7 +23,7 @@ export class BarcodeScanner {
   }
 
   /**
-   * Begin to san the images
+   * Begin to scan the images
    *
    * @async
    * @returns {${2:*}}
@@ -48,7 +54,7 @@ export class BarcodeScanner {
     const imageData = await this.cameraPort.captureFrame()
     const barcode = await this.imageDataPort.detectBarcode(imageData)
 
-    if (barcode && this.onBarcodeDetected) {
+    if (barcode.length && this.onBarcodeDetected) {
       this.onBarcodeDetected(barcode)
     }
 
