@@ -6,6 +6,7 @@ import { WasmAdapter } from './adapters/wasmAdapter.js'
 import './components/cartDialog.js'
 import './components/videoContainer.js'
 import './components/customFooter.js'
+import './components/cartItem.js'
 
 import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
 

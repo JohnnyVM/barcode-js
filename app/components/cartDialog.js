@@ -1,24 +1,18 @@
 // customCartDialog.js
+import './cartItem.js';
 import { Cart } from '../core/cart.js';
 
 export class CartDialog extends HTMLElement {
-    /**
-     * Cart
-     * @type {Cart}
-     */
-    cart
-
     constructor() {
         super();
         this.cart = new Cart();
+        
         const dialog = document.createElement('dialog');
         dialog.classList.add('mdl-dialog');
         dialog.innerHTML = `
             <h4 class="mdl-dialog__title">Cart</h4>
             <div class="mdl-dialog__content">
-                <ul id="cart-items">
-                    <p>Your cart is empty.</p>
-                </ul>
+                <cart-items id="cart-items"></cart-items>
             </div>
             <div class="mdl-dialog__actions">
                 <button type="button" id="clear-cart" class="mdl-button">Clear Cart</button>
@@ -53,21 +47,9 @@ export class CartDialog extends HTMLElement {
     }
 
     renderCartItems() {
-        const cartItemsContainer = this.querySelector('#cart-items');
-        cartItemsContainer.innerHTML = '';
-
-        const items = this.cart.getItems();
-        if (items.length === 0) {
-            cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-        } else {
-            items.forEach(item => {
-                const itemElement = document.createElement('li');
-                itemElement.textContent = `${item.rawValue} - Quantity: ${item.quantity}`;
-                cartItemsContainer.appendChild(itemElement);
-            });
-        }
+        const cartItemsElement = this.querySelector('#cart-items');
+        cartItemsElement.items = this.cart.getItems();
     }
 }
 
 customElements.define('cart-dialog', CartDialog);
-
