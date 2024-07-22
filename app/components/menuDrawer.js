@@ -1,10 +1,16 @@
-// src/components/menuDrawer.js
-class MenuDrawer extends HTMLElement {
-    constructor() {
-        super();
-        const drawer = document.createElement('aside');
-        drawer.classList.add('menu-drawer');
-        drawer.innerHTML = `
+/**
+ * Menu drawer class
+ *
+ * @class MenuDrawer
+ * @typedef {MenuDrawer}
+ * @extends {HTMLElement}
+ */
+export class MenuDrawer extends HTMLElement {
+  constructor () {
+    super()
+    const drawer = document.createElement('aside')
+    drawer.classList.add('menu-drawer')
+    drawer.innerHTML = `
             <div class="drawer-content">
                 <h2>Menu</h2>
                 <ul>
@@ -15,21 +21,20 @@ class MenuDrawer extends HTMLElement {
                     <i class="material-icons">close</i>
                 </button>
             </div>
-        `;
-        this.appendChild(drawer);
+        `
+    this.appendChild(drawer)
 
-        this.closeButton = this.querySelector('.close-button');
-        this.closeButton.addEventListener('click', () => this.close());
-    }
+    this.closeButton = this.querySelector('.close-button')
+    this.closeButton.addEventListener('click', () => this.close())
+  }
 
-    show() {
-        this.style.display = 'block';
-    }
+  show () {
+    this.style.display = 'block'
+  }
 
-    close() {
-        this.style.display = 'none';
-    }
+  close () {
+    this.style.display = 'none'
+  }
 }
 
-customElements.define('custom-menu-drawer', MenuDrawer);
-export default MenuDrawer;
+customElements.define('custom-menu-drawer', MenuDrawer)
