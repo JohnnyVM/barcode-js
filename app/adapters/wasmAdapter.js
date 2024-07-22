@@ -8,12 +8,13 @@ import { ImageDataPort } from '../interfaces/imageDataPort.js'
 export class WasmAdapter extends ImageDataPort {
   constructor (wasmModule) {
     super()
-    this.wasmModule = wasmModule
+    this.wasmModule = wasmModule;
   }
 
-  detectBarcode (imageData) {
-    const { detectBarcode } = this.wasmModule.instance.exports
-    // Assuming `detectBarcode` takes raw image data, width, and height
-    return detectBarcode(imageData.data, imageData.width, imageData.height)
+  async detectBarcode (imageData) {
+    const symbols = await this.wasmModule.detect(imageData);
+
+    symbols.forEach(s => s.rawData = s.decode())
+    return JSON.stringify(symbols, null, 2)
   }
 }

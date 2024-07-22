@@ -17,7 +17,7 @@ export class BarcodeScanner {
   }
 
   /**
-   * ${1:Description placeholder}
+   * Begin to san the images
    *
    * @async
    * @returns {${2:*}}
@@ -46,8 +46,7 @@ export class BarcodeScanner {
     if (!this.isScanning) return
 
     const imageData = await this.cameraPort.captureFrame()
-    //const barcode = this.imageDataPort.detectBarcode(imageData)
-    const barcode = false;
+    const barcode = await this.imageDataPort.detectBarcode(imageData)
 
     if (barcode && this.onBarcodeDetected) {
       this.onBarcodeDetected(barcode)

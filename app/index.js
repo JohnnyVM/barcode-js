@@ -6,31 +6,26 @@ import { WasmAdapter } from './adapters/wasmAdapter.js'
 import './components/videoContainer.js'
 import './components/customFooter.js'
 
-async function loadWasmModule () {
-  const response = await fetch('barcode.wasm')
-  const buffer = await response.arrayBuffer()
-  const wasmModule = await WebAssembly.compile(buffer)
-  return WebAssembly.instantiate(wasmModule)
+import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
+
+async function loadWasmModule() {
+    const supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
+    return new BarcodeDetectorPolyfill({ formats: supportedFormats });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const videoElement = document.querySelector('video-container video')
-  const videoAdapter = new VideoAdapter(videoElement)
+  const videoElement = document.querySelector('video-container')
+  const videoAdapter = new VideoAdapter(videoElement.video)
 
-  //const wasmModule = await loadWasmModule()
-  //const wasmAdapter = new WasmAdapter(wasmModule)
-  const wasmAdapter = new Object()
+  const wasmModule = await loadWasmModule()
+  const wasmAdapter = new WasmAdapter(wasmModule)
 
   const barcodeHandler = new BarcodeHandler('https://api.example.com/products')
   const barcodePort = {
     handleBarcodeDetected: barcodeHandler.handleBarcodeDetected.bind(barcodeHandler)
   }
 
-  const scanner = new BarcodeScanner(videoAdapter, wasmAdapter, barcodePort)
-
-  // Initialize custom elements
-  const cartModal = document.querySelector('custom-modal-cart')
-  const menuDrawer = document.querySelector('custom-menu-drawer')
+  const scanner = new BarcodeScanner(videoAdapter, wasmAdapter)
 
   // Start scanning for barcodes
   scanner.startScanning()
