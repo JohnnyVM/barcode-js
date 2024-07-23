@@ -18,7 +18,8 @@ export class CartItems extends HTMLElement {
             const ul = document.createElement('ul');
             this._items.forEach(item => {
                 const li = document.createElement('li');
-                li.textContent = `${item.name} - ${item.barcode} - ${item.lst_price} €`;
+                const productPrice = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(item.lst_price)
+                li.textContent = `${item.name} - ${item.barcode} - ${productPrice}`;
                 ul.appendChild(li);
             });
             this.appendChild(ul);
