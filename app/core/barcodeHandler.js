@@ -1,22 +1,45 @@
-// src/core/barcodeHandler.js
 export class BarcodeHandler {
+    /**
+     * Creates an instance of BarcodeHandler.
+     *
+     * @constructor
+     * @param {*} apiUrl
+     */
     constructor(apiUrl) {
         this.apiUrl = apiUrl;
     }
 
-    async handleBarcodeDetected(barcode) {
+    /**
+     * Description placeholder
+     *
+     * @async
+     * @param {*} barcode
+     * @returns {*}
+     */
+    async handleBarcodeDetected(barcodes) {
         try {
-            const response = await fetch(`${this.apiUrl}/${barcode}`);
-            const product = await response.json();
-            this.addProductToCart(product);
+            for (const barcode of barcodes) {
+                const response = await fetch(new URL('/product/' + barcode.rawValue, this.apiUrl));
+                const product = await response.json();
+                this.addProductToCart(product);
+            }
         } catch (error) {
             console.error('Failed to fetch product data:', error);
         }
     }
 
-    async addProductToCart(product) {
-        // Example: Adding product to cart
-        console.log(`Adding product to cart: ${product.name} - $${product.price}`);
-        // Integrate with actual cart management
+    /**
+     * Description placeholder
+     *
+     * @async
+     * @param {*} product
+     * @returns {*}
+     */
+    async addProductToCart(products) {
+        for (const product of products) {
+            const cartDialog = document.querySelector('cart-list');
+            cartDialog.addItemToCart(product);
+            cartDialog.renderCartItems()
+        }
     }
 }

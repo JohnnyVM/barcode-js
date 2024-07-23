@@ -1,9 +1,9 @@
-// main.js
 import { BarcodeScanner } from './core/barcodeScanner.js'
-//import { BarcodeHandler } from './core/barcodeHandler.js'
+import { BarcodeHandler } from './core/barcodeHandler.js'
 import { VideoAdapter } from './adapters/videoAdapter.js'
 import { WasmAdapter } from './adapters/wasmAdapter.js'
-import './components/cartDialog.js'
+import { config } from './config.js'
+import './components/cartList.js'
 import './components/videoContainer.js'
 import './components/customFooter.js'
 import './components/cartItem.js'
@@ -15,18 +15,6 @@ async function loadWasmModule() {
     return new BarcodeDetectorPolyfill({ formats: supportedFormats });
 }
 
-function addProductToCart(barcode) {
-    const cartDialog = document.querySelector('cart-dialog');
-    cartDialog.addItemToCart(barcode);
-    cartDialog.renderCartItems()
-}
-
-async function handleBarcodeDetect(barcodes) {
-  for (const value of barcodes) {
-    addProductToCart(value);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   const videoElement = document.querySelector('video-container')
   const videoAdapter = new VideoAdapter(videoElement.video)
@@ -34,10 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const wasmModule = await loadWasmModule()
   const wasmAdapter = new WasmAdapter(wasmModule)
 
-  //const barcodeHandler = new BarcodeHandler('https://api.example.com/products')
+  const barcodeHandler = new BarcodeHandler(config['url'])
 
   const scanner = new BarcodeScanner(videoAdapter, wasmAdapter)
-  scanner.onBarcodeDetected = handleBarcodeDetect
+  scanner.onBarcodeDetected = barcodeHandler.handleBarcodeDetected.bind(barcodeHandler)
 
   // Start scanning for barcodes
   scanner.startScanning()

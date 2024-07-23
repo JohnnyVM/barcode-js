@@ -6,10 +6,10 @@ export class Cart {
     }
 
     addItem(item) {
-        if (this.items[item.rawValue]) {
-            this.items[item.rawValue].quantity += 1;
+        if (this.items[item.barcode]) {
+            this.items[item.barcode].quantity += 1;
         } else {
-            this.items[item.rawValue] = { ...item, quantity: 1 };
+            this.items[item.barcode] = { ...item, quantity: 1 };
         }
     }
 
