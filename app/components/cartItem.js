@@ -72,7 +72,7 @@ export class CartItem extends HTMLElement {
                 </div>
                 <div class="item-info">
                     <div class="name">${this.name}</div>
-                    <div>Price: $${displayPrice}</div>
+                    <div>Price: ${displayPrice}</div>
                     <div>Barcode: ${this.barcode}</div>
                 </div>
                 <!--div class="item-controls">
