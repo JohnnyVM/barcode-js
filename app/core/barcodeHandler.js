@@ -38,7 +38,13 @@ export class BarcodeHandler {
     async addProductToCart(products) {
         for (const product of products) {
             const cartDialog = document.querySelector('cart-list');
+            const preNumberItems = cartDialog.cart.items.length
             cartDialog.addItemToCart(product);
+            if (preNumberItems < cartDialog.cart.items.length) {
+                cartDialog.scrollTo(0, cartDialog.scrollHeight);
+                let sound = new Audio("../static/audio/scanner-beep.mp3");  
+                sound.play();
+            }
             cartDialog.renderCartItems()
         }
     }

@@ -19,6 +19,16 @@ export class CartItem extends HTMLElement {
                     border-bottom: 1px solid #ccc;
                     font-size: 14px;
                 }
+                .mdl-card__actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 8px;
+                }
+                .mdl-card__actions .mdl-button {
+                    min-width: 0;
+                    padding: 0;
+                    margin: 0;
+                }
                 .item-info {
                     flex: 1;
                 }
@@ -55,6 +65,11 @@ export class CartItem extends HTMLElement {
                 }
             </style>
             <div class="cart-item">
+                <div class="mdl-card__actions">
+                    <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="material-icons">remove_shopping_cart</i>
+                    </button>
+                </div>
                 <div class="item-info">
                     <div class="name">${this.name}</div>
                     <div>Price: $${displayPrice}</div>
@@ -67,6 +82,14 @@ export class CartItem extends HTMLElement {
                 </div-->
             </div>
         `;
+
+        this.shadowRoot.querySelector('.mdl-button').addEventListener('click', () => {
+            this.dispatchEvent(new CustomEvent('remove-item', {
+                detail: { barcode: this.barcode },
+                bubbles: true,
+                composed: true
+            }));
+        });
 
         /*this.shadowRoot.querySelector('#increase').addEventListener('click', () => {
             this.quantity++;
