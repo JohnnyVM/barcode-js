@@ -5,7 +5,7 @@ export class CustomFooter extends HTMLElement {
         const footer = document.createElement('footer');
         footer.classList.add('custom-footer');
         footer.innerHTML = `
-            <img src="company-icon.png" class="company-icon" alt="Company Icon"> <span>v0.2</span>
+            <img src="company-icon.png" class="company-icon" alt="Company Icon"> <span>v0.3</span>
         `;
         this.appendChild(footer);
     }
