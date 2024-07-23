@@ -28,7 +28,7 @@ export class ZoomSlider extends HTMLElement {
     setVideoTrack(track) {
         this.videoTrack = track;
         //this.updateZoom(this.shadowRoot.querySelector('input').value);
-        if(typeof(this.videoTrack.getCapabilities) !== "function") {
+        if(typeof(this.videoTrack.getCapabilities) === "function") {
             const capabilities = this.videoTrack.getCapabilities();
             if(capabilities.zoom) {
                 this.style.display = 'flex';
