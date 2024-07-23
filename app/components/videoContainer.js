@@ -63,6 +63,11 @@ export class VideoContainer extends HTMLElement {
             const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
             const videoElement = this.querySelector('#video');
             videoElement.srcObject = maxStream;
+
+            const videoTrack = maxStream.getVideoTracks()[0];
+            const zoomSlider = document.getElementById('zoom-slider');
+            zoomSlider.setVideoTrack(videoTrack);
+        
         } catch (error) {
             console.error('Error accessing the camera', error);
         }
