@@ -51,6 +51,7 @@ export class BarcodeScanner {
   async scanFrame () {
     if (!this.isScanning) return
 
+    console.log("scan")
     const imageData = await this.cameraPort.captureImage();
     const barcode = await this.imageDataPort.detectBarcode(imageData);
     if (barcode.length && this.onBarcodeDetected) {

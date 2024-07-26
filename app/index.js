@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const back = document.querySelector('cart-list');
 
-
   const barcodeButton = document.querySelector('custom-footer button.barcode-scanner')
   barcodeButton.addEventListener("mousedown", (ev) => {
     console.log('Button pressed');

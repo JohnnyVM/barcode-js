@@ -21,10 +21,6 @@ export class VideoAdapter extends CameraPort {
    * @returns {Promise<[TODO:type]>} [TODO:description]
    */
   async init () {
-    await new Promise(resolve => {
-      this.videoElement.onloadedmetadata = () => resolve()
-    })
-
     if ('ImageCapture' in window) {
       this.track = this.videoElement.srcObject.getVideoTracks()[0];
       this.imageCapture = new ImageCapture(this.track);
@@ -37,7 +33,7 @@ export class VideoAdapter extends CameraPort {
       };
   }
 
-    return new Promise(resolve => resolve())
+    return Promise.resolve();
   }
 
   /**
