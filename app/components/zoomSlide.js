@@ -27,9 +27,6 @@ export class ZoomSlider extends HTMLElement {
 
     async setVideoTrack(track) {
         this.videoTrack = track;
-        await new Promise(resolve => {
-            this.videoTrack.onloadedmetadata = () => resolve();
-        });
         if(typeof(this.videoTrack.getCapabilities) === "function") {
             const capabilities = this.videoTrack.getCapabilities();
             if(capabilities.zoom) {
