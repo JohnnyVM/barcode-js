@@ -1,5 +1,8 @@
 /**
  * Video Container class
+ * 
+ * @todo Video container should be splited in VideoContainer and Photo container
+ * and select photo if imgeCapture is available
  * @extends HTMLElement
  */
 export class VideoContainer extends HTMLElement {
@@ -63,9 +66,9 @@ export class VideoContainer extends HTMLElement {
                 stream.removeTrack(track);
             });
 
-            const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
             const videoElement = this.querySelector('#video');
-            videoElement.srcObject = maxStream;
+            const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
+            videoElement.srcObject = maxStream
 
             const videoTrack = maxStream.getVideoTracks()[0];
             const zoomSlider = document.getElementById('zoom-slider');
