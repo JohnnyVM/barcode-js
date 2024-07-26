@@ -18,8 +18,8 @@ async function loadWasmModule() {
   } catch {
     window['BarcodeDetector'] = BarcodeDetectorPolyfill
   }
-  const supportedFormats = await BarcodeDetector.getSupportedFormats()
-  return new BarcodeDetector({ formats: supportedFormats });
+  const supportedFormats = await window['BarcodeDetector'].getSupportedFormats()
+  return new window['BarcodeDetector']({ formats: supportedFormats });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
