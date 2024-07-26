@@ -59,12 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     ev.stopImmediatePropagation();
     console.log('touch end');
     back.nobackground();
-    scanner.startScanning()
+    scanner.stopScanning()
   });
   barcodeButton.addEventListener("touchcancel", (ev) => {
     console.log('touch cancel');
     back.nobackground();
-    scanner.startScanning()
+    scanner.stopScanning()
   });
   barcodeButton.addEventListener("mouseleave", (ev) => {
     console.log('Button leaved');
