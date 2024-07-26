@@ -50,6 +50,14 @@ export class CartList extends HTMLElement {
         this.renderCartItems();
     }
 
+    background() {
+        this.style.background = "red";
+    }
+
+    nobackground() {
+        this.style.background = "white";
+    }
+
     renderCartItems() {
         const cartItemsContainer = this.shadowRoot.querySelector('#cart-items');
         cartItemsContainer.innerHTML = '';

@@ -34,6 +34,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   const scanner = new BarcodeScanner(videoAdapter, wasmAdapter)
   scanner.onBarcodeDetected = barcodeHandler.handleBarcodeDetected.bind(barcodeHandler)
 
-  // Start scanning for barcodes
-  scanner.startScanning()
+  const back = document.querySelector('cart-list');
+
+
+  const barcodeButton = document.querySelector('custom-footer button.barcode-scanner')
+  barcodeButton.addEventListener("mousedown", (ev) => {
+    console.log('Button pressed');
+    back.background();
+    scanner.startScanning()
+  });
+  barcodeButton.addEventListener("touchstart", (ev) => {
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    console.log('touch pressed');
+    back.background();
+    scanner.startScanning()
+  });
+  barcodeButton.addEventListener("mouseup", (ev) => {
+    console.log('Button released');
+    back.nobackground();
+    scanner.stopScanning()
+  });
+  barcodeButton.addEventListener("touchend", (ev) => {
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    console.log('touch end');
+    back.nobackground();
+    scanner.startScanning()
+  });
+  barcodeButton.addEventListener("touchcancel", (ev) => {
+    console.log('touch cancel');
+    back.nobackground();
+    scanner.startScanning()
+  });
+  barcodeButton.addEventListener("mouseleave", (ev) => {
+    console.log('Button leaved');
+    back.nobackground();
+    scanner.stopScanning()
+  });
 })
