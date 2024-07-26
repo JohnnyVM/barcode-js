@@ -53,8 +53,8 @@ export class VideoContainer extends HTMLElement {
             const constraints = {
                 video: {
                     facingMode: { ideal: 'environment' },
-                    width: { max: settings.width },
-                    height: { max: settings.height },
+                    //width: { max: settings.width },
+                    //height: { max: settings.height },
                     frameRate: { ideal: 60 }, // Higher frame rate for smooth video
                     focusMode: 'continuous',
                 },
@@ -67,7 +67,7 @@ export class VideoContainer extends HTMLElement {
             });
 
             const videoElement = this.querySelector('#video');
-            const maxStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
             videoElement.srcObject = maxStream
 
             const videoTrack = maxStream.getVideoTracks()[0];
