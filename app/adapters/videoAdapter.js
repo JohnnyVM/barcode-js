@@ -53,11 +53,11 @@ export class VideoAdapter extends CameraPort {
   }
 
   async captureImage() {
-    //if ('ImageCapture' in window) {
-    //  return this.capturePhoto();
-    //} else {
+    if ('ImageCapture' in window) {
+      return this.capturePhoto();
+    } else {
       return this.captureFrame()
-    //}
+    }
   }
 
   stop () {
