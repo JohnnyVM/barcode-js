@@ -55,14 +55,18 @@ export class BarcodeScanner {
   async scanFrame () {
     if (!this.isScanning) return
 
-    console.log("scan")
-    const imageData = await this.cameraPort.captureImage();
-    const barcode = await this.imageDataPort.detectBarcode(imageData);
-    if (barcode.length && this.onBarcodeDetected) {
-      this.onBarcodeDetected(barcode);
-    }
+    try {
+      console.log("scan")
+      const imageData = await this.cameraPort.captureImage();
+      const barcode = await this.imageDataPort.detectBarcode(imageData);
+      if (barcode.length && this.onBarcodeDetected) {
+        this.onBarcodeDetected(barcode);
+      }
 
-    await sleep(300);
-    requestAnimationFrame(() => this.scanFrame())
+      await sleep(300);
+      requestAnimationFrame(() => this.scanFrame())
+    } catch(error) {
+      this.scanFrame()
+    }
   }
 }
