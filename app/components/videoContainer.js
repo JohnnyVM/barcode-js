@@ -58,7 +58,10 @@ export class VideoContainer extends HTMLElement {
                 audio: false,
             };
 
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(track => {
+                track.stop();
+                stream.removeTrack(track);
+            });
 
             const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
             const videoElement = this.querySelector('#video');
