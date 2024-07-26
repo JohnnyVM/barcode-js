@@ -56,7 +56,7 @@ export class BarcodeScanner {
     if (barcode.length && this.onBarcodeDetected) {
       this.onBarcodeDetected(barcode);
     }
-    requestAnimationFrame(() => this.scanFrame());
-    //setTimeout(() => requestAnimationFrame(() => this.scanFrame()), 300)
+
+    setTimeout(() => requestAnimationFrame(() => this.scanFrame()), 300)
   }
 }
