@@ -32,8 +32,8 @@ export class VideoAdapter extends CameraPort {
 
       // Adjust constraints to maximum photo capabilities
       this.maxPhotoCapabilities = {
-          width: capabilities.width ? { max: photoCapabilities.width.max } : undefined,
-          height: capabilities.height ? { max: photoCapabilities.height.max } : undefined,
+          width: photoCapabilities.width ? { max: photoCapabilities.width.max } : undefined,
+          height: photoCapabilities.height ? { max: photoCapabilities.height.max } : undefined,
       };
   }
 
