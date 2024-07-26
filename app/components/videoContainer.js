@@ -64,7 +64,6 @@ export class VideoContainer extends HTMLElement {
             const videoElement = this.querySelector('#video');
             videoElement.srcObject = maxStream;
 
-
             const videoTrack = maxStream.getVideoTracks()[0];
             const zoomSlider = document.getElementById('zoom-slider');
             zoomSlider.setVideoTrack(videoTrack);
