@@ -44,9 +44,8 @@ export class VideoContainer extends HTMLElement {
             video.srcObject = stream;
             await video.play();
 
+            // TODO getPhotoCapabilities()
             const settings = stream.getVideoTracks()[0].getSettings();
-
-
 
             const constraints = {
                 video: {
@@ -54,8 +53,9 @@ export class VideoContainer extends HTMLElement {
                     width: { max: settings.width },
                     height: { max: settings.height },
                     frameRate: { ideal: 60 }, // Higher frame rate for smooth video
-                    focusMode: 'continuous'
-                }
+                    focusMode: 'continuous',
+                },
+                audio: false,
             };
 
             stream.getTracks().forEach(track => track.stop());
