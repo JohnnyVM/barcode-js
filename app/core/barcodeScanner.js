@@ -1,3 +1,7 @@
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /**
  * BarcodeScanner is responsible for the core logic of scanning barcodes from the video feed.
  */
@@ -58,6 +62,7 @@ export class BarcodeScanner {
       this.onBarcodeDetected(barcode);
     }
 
-    setTimeout(() => requestAnimationFrame(() => this.scanFrame()), 300)
+    await sleep(300);
+    requestAnimationFrame(() => this.scanFrame())
   }
 }
