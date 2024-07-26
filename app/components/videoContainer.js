@@ -43,8 +43,8 @@ export class VideoContainer extends HTMLElement {
             const constraints = {
                 video: {
                     facingMode: { ideal: 'environment' },
-                    width: { ideal: 4096 },
-                    height: { ideal: 2160 },
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
                     frameRate: { ideal: 60 },
                 },
                 audio: false

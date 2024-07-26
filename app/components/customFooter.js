@@ -31,7 +31,7 @@ export class CustomFooter extends HTMLElement {
             <img src="../static/img/company-icon.png" class="company-icon" alt="Company Icon">
           </button>
           <span>v0.4</span>
-          <button class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent barcode-scanner" data-upgraded=",MaterialButton,MaterialRipple">
+          <button user-select="none" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent barcode-scanner" data-upgraded=",MaterialButton,MaterialRipple">
             <i class="material-icons mdl-color-text--white" role="presentation">barcode_scanner</i>
             <span class="material-symbols-outlined barcode-scanner">barcode_scanner</span>
           </button>
