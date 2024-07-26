@@ -42,29 +42,7 @@ export class VideoContainer extends HTMLElement {
         try {
             //const capabilities = track.getCapabilities();
             //const supported = track.getSupportedConstraints();
-            const video = document.createElement('video');
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-            video.srcObject = stream;
-            await video.play();
-
-            // TODO getPhotoCapabilities()
-            const settings = stream.getVideoTracks()[0].getSettings();
-
-            const constraints = {
-                video: {
-                    facingMode: { ideal: 'environment' },
-                    //width: { max: settings.width },
-                    //height: { max: settings.height },
-                    frameRate: { ideal: 60 }, // Higher frame rate for smooth video
-                    focusMode: 'continuous',
-                },
-                audio: false,
-            };
-
-            stream.getTracks().forEach(track => {
-                track.stop();
-                stream.removeTrack(track);
-            });
+            const constraints = { video: {facingMode: { ideal: 'environment' }}, audio: false }
 
             const videoElement = this.querySelector('#video');
             const maxStream = await navigator.mediaDevices.getUserMedia(constraints);

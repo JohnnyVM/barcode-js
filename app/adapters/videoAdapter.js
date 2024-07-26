@@ -48,8 +48,10 @@ export class VideoAdapter extends CameraPort {
   }
 
   async capturePhoto() {
-    const capture = new ImageCapture(this.track);
-    return capture.takePhoto()
+    const capture = await new ImageCapture(this.track);
+    const blob = await capture.takePhoto();
+    const image = await createImageBitmap(blob)
+    return image
   }
 
   async captureImage() {
