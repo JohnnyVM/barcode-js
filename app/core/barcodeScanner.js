@@ -53,7 +53,6 @@ export class BarcodeScanner {
 
     const imageData = await this.cameraPort.captureImage()
     const barcode = await this.imageDataPort.detectBarcode(imageData)
-
     if (barcode.length && this.onBarcodeDetected) {
       this.onBarcodeDetected(barcode)
     }
