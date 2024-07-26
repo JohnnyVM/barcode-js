@@ -6,7 +6,7 @@ export class CameraPort {
     throw new Error('Method not implemented')
   }
 
-  async captureFrame () {
+  async captureImage () {
     throw new Error('Method not implemented')
   }
 

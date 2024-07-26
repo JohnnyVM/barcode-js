@@ -14,9 +14,6 @@ export class VideoContainer extends HTMLElement {
         this.video.setAttribute('id', 'video');
         this.video.setAttribute('autoplay', '');
 
-        this.photo = document.createElement('img');
-        this.photo.setAttribute('id', 'photo');
-
         const overlay = document.createElement('div');
         overlay.classList.add('overlay');
 
@@ -25,7 +22,6 @@ export class VideoContainer extends HTMLElement {
 
         overlay.appendChild(line);
         this.appendChild(this.video);
-        this.appendChild(this.photo);
         this.appendChild(overlay);
     }
 
@@ -41,51 +37,41 @@ export class VideoContainer extends HTMLElement {
      */
     async startCamera() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-            this.video.srcObject = stream;
-            await this.video.play();
-
-            const track = stream.getVideoTracks()[0];
             //const capabilities = track.getCapabilities();
             //const supported = track.getSupportedConstraints();
-            const settings = track.getSettings();
+            const video = document.createElement('video');
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            video.srcObject = stream;
+            await video.play();
+
+            const settings = stream.getVideoTracks()[0].getSettings();
+
+
+
             const constraints = {
-                width: { max: settings.width },
-                height: { max: settings.height },
-                frameRate: { ideal: 60 }, // Higher frame rate for smooth video
+                video: {
+                    facingMode: { ideal: 'environment' },
+                    width: { max: settings.width },
+                    height: { max: settings.height },
+                    frameRate: { ideal: 60 }, // Higher frame rate for smooth video
+                    focusMode: 'continuous'
+                }
             };
 
-            await track.applyConstraints(constraints);
+            stream.getTracks().forEach(track => track.stop());
 
-            if ('ImageCapture' in window) {
-                const imageCapture = new ImageCapture(track);
-                this.capturePhoto(imageCapture);
-            }
+            const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
+            const videoElement = this.querySelector('#video');
+            videoElement.srcObject = maxStream;
+
+
+            const videoTrack = maxStream.getVideoTracks()[0];
+            const zoomSlider = document.getElementById('zoom-slider');
+            zoomSlider.setVideoTrack(videoTrack);
 
         } catch (error) {
             console.error('Error accessing the camera', error);
         }
-    }
-
-    /**
-     * Captures a photo from the video stream every 300ms
-     *
-     * @param {ImageCapture} imageCapture
-     */
-    async capturePhoto(imageCapture) {
-        const captureInterval = 300;
-        const captureLoop = async () => {
-            try {
-                const photo = await imageCapture.takePhoto();
-                const photoBlob = URL.createObjectURL(photo);
-                this.photo.src = photoBlob;
-            } catch (error) {
-                console.error('Error capturing photo', error);
-            }
-            setTimeout(captureLoop, captureInterval);
-        };
-
-        captureLoop();
     }
 }
 

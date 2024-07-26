@@ -21,9 +21,15 @@ export class VideoAdapter extends CameraPort {
    * @returns {Promise<[TODO:type]>} [TODO:description]
    */
   async init () {
-    return new Promise(resolve => {
+    await new Promise(resolve => {
       this.videoElement.onloadedmetadata = () => resolve()
     })
+
+    if ('ImageCapture' in window) {
+      this.track = this.videoElement.srcObject.getVideoTracks()[0];
+    }
+
+    return new Promise(resolve => resolve())
   }
 
   /**
@@ -41,9 +47,22 @@ export class VideoAdapter extends CameraPort {
     return context.getImageData(0, 0, canvas.width, canvas.height)
   }
 
+  async capturePhoto() {
+    const capture = new ImageCapture(this.track);
+    return capture.takePhoto()
+  }
+
+  async captureImage() {
+    if ('ImageCapture' in window) {
+      return this.capturePhoto();
+    } else {
+      return this.captureFrame()
+    }
+  }
+
   stop () {
-    if (this.stream) {
-      this.stream.getTracks().forEach(track => track.stop())
+    if(this.track) {
+      this.track.stop();
     }
   }
 }

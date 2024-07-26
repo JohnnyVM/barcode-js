@@ -24,13 +24,6 @@ video-container video {
     max-height: calc(100vh - 64px);
 }
 
-video-container #photo {
-    clip-path: inset(0 0 0 50%); /* Crop the left side */
-    position: absolute;
-    width: 100%;
-    max-height: calc(100vh - 64px);
-}
-
 .overlay {
     position: absolute;
     width: 300px;
