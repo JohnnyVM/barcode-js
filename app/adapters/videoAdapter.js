@@ -27,7 +27,15 @@ export class VideoAdapter extends CameraPort {
 
     if ('ImageCapture' in window) {
       this.track = this.videoElement.srcObject.getVideoTracks()[0];
-    }
+      this.imageCapture = new ImageCapture(this.track);
+      const photoCapabilities = await this.imageCapture.getPhotoCapabilities();
+
+      // Adjust constraints to maximum photo capabilities
+      this.maxPhotoCapabilities = {
+          width: capabilities.width ? { max: photoCapabilities.width.max } : undefined,
+          height: capabilities.height ? { max: photoCapabilities.height.max } : undefined,
+      };
+  }
 
     return new Promise(resolve => resolve())
   }
@@ -48,8 +56,7 @@ export class VideoAdapter extends CameraPort {
   }
 
   async capturePhoto() {
-    const capture = await new ImageCapture(this.track);
-    const blob = await capture.takePhoto();
+    const blob = await this.imageCapture.takePhoto(this.maxPhotoCapabilities);
     const image = await createImageBitmap(blob)
     return image
   }

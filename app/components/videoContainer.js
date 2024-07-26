@@ -40,17 +40,42 @@ export class VideoContainer extends HTMLElement {
      */
     async startCamera() {
         try {
-            //const capabilities = track.getCapabilities();
-            //const supported = track.getSupportedConstraints();
-            const constraints = { video: {facingMode: { ideal: 'environment' }}, audio: false }
+            const constraints = {
+                video: {
+                    facingMode: { ideal: 'environment' },
+                    width: { ideal: 4096 },
+                    height: { ideal: 2160 },
+                    frameRate: { ideal: 60 },
+                },
+                audio: false
+            };
 
-            const videoElement = this.querySelector('#video');
             const maxStream = await navigator.mediaDevices.getUserMedia(constraints);
-            videoElement.srcObject = maxStream
+            this.video.srcObject = maxStream;
+            await this.video.play();
 
             const videoTrack = maxStream.getVideoTracks()[0];
+
+            if (video.getCapabilities) {
+                // Get the capabilities
+                const capabilities = videoTrack.getCapabilities();
+
+                // Adjust constraints to maximum capabilities
+                const maxConstraints = {
+                    width: capabilities.width ? { max: capabilities.width.max } : undefined,
+                    height: capabilities.height ? { max: capabilities.height.max } : undefined,
+                    frameRate: capabilities.frameRate ? { max: capabilities.frameRate.max } : undefined,
+                    facingMode: 'environment',
+                };
+
+                await videoTrack.applyConstraints(maxConstraints);
+            }
+
             const zoomSlider = document.getElementById('zoom-slider');
-            zoomSlider.setVideoTrack(videoTrack);
+            if (zoomSlider) {
+                zoomSlider.setVideoTrack(videoTrack);
+            }
+
         } catch (error) {
             console.error('Error accessing the camera', error);
         }
