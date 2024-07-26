@@ -65,9 +65,5 @@ export class VideoAdapter extends CameraPort {
     }
   }
 
-  stop () {
-    if(this.track) {
-      this.track.stop();
-    }
-  }
+  stop () {}
 }
