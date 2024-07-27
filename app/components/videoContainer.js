@@ -1,3 +1,5 @@
+import { ErrorHandler } from './errorHandler.js'
+
 /**
  * Video Container class
  * 
@@ -56,7 +58,7 @@ export class VideoContainer extends HTMLElement {
 
             const videoTrack = maxStream.getVideoTracks()[0];
 
-            if (video.getCapabilities) {
+            if (videoTrack.getCapabilities) {
                 // Get the capabilities
                 const capabilities = videoTrack.getCapabilities();
 
@@ -77,9 +79,9 @@ export class VideoContainer extends HTMLElement {
             }
 
         } catch (error) {
-            console.error('Error accessing the camera', error);
+          ErrorHandler.handleError(error, 'Error al iniciar la cámara. Por favor verifique la configuración y los permisos de su cámara.');
         }
-    }
+      }
 }
 
 customElements.define('video-container', VideoContainer);
