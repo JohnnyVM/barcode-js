@@ -42,6 +42,24 @@ export class VideoContainer extends HTMLElement {
      */
     async startCamera() {
         try {
+            // Check if any media devices are available
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                throw new Error('Media devices not supported');
+            }
+
+            // Enumerate devices to check for camera availability
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+            if (videoDevices.length === 0) {
+                throw new Error('No camera devices found');
+            }
+
+            // Check if the video element is already streaming
+            if (this.video.srcObject) {
+                console.log('Camera is already in use');
+                return;
+            }
+
             const constraints = {
                 video: {
                     facingMode: { ideal: 'environment' },
